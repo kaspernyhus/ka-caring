@@ -1,9 +1,9 @@
 from django import forms
-from .models import Tur
+from .models import Ture
 
 class TurForm(forms.ModelForm):
     class Meta:
-        model = Tur
-        fields = ['km', 'user_id']
+        model = Ture
+        fields = ['dato', 'km', 'user_id']
     
 

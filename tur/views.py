@@ -15,6 +15,9 @@ class CreateTur(TemplateView):
         if form.is_valid():
             form.save()
             #text = form.cleaned_data['post']
+        else:
+            print('------------------------ form not valid ------------------------')
+
 
         return redirect('index')
 
