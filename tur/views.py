@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from tur.forms import TurForm
 
 
@@ -11,12 +11,10 @@ class CreateTur(TemplateView):
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
-        form = TurForm()
+        form = TurForm(request.POST)
         if form.is_valid():
-            text = form.cleaned_data['post']
-            print(text)
-            print('--------------------------------------- her ------------------------------------')
-            return redirect('index')
+            form.save()
+            #text = form.cleaned_data['post']
 
-        return render(request, self.template_name, {'form': form})
+        return redirect('index')
 
