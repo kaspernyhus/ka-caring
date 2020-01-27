@@ -1,0 +1,29 @@
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    font-family: courier;
+    font-size:70%
+    }
+  
+  .center {
+    margin: auto;
+    width: 200px;
+  }
+
+  .button {
+    background-color: #ff8f8f;
+    border: none;
+    color: black;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    font-family: courier;
+    display: inline-block;
+    font-size: 65%;
+    margin: 4px 2px;
+    cursor: pointer;
+    }
