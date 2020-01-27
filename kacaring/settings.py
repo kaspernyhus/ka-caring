@@ -33,7 +33,8 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'index.apps.IndexConfig',
+    'index',
+    'tur',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

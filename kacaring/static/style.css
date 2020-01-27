@@ -23,8 +23,8 @@ width: 170px;
 }
 
 .button {
-    background-color: #4CAF50; /* Green */
-    border: none;
+    background-color: rgb(208, 253, 210);
+    border: 2px solid black;
     color: black;
     padding: 16px 44px;
     text-align: center;
@@ -37,15 +37,28 @@ width: 170px;
     transition-duration: 0.4s;
     cursor: pointer;
   }
-  
-  .button {
-    background-color: white; 
-    color: black; 
-    border: 2px solid black;
-  }
-  
-  .button:hover {
-    background-color: #4CAF50;
-    color: white;
-  }
 
+.button:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.form_button {
+  background-color: rgb(208, 253, 210);
+  border: 2px solid black;
+  color: black;
+  padding: 16px 44px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 135%;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.form_button:hover {
+  background-color: #4CAF50;
+  color: white;
+}
