@@ -62,3 +62,8 @@ width: 170px;
   background-color: #4CAF50;
   color: white;
 }
+
+.radioselect {
+  list-style-type: none;
+  padding-left: 20px;
+}
