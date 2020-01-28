@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="header">Tur registreret!</h1>
+<p class="header">Du har kørt {{km}} km.</p>
+<div class="center">
+    <a href="{% url 'index' %}" class="button">Hjem</a>
+</div>
+{% endblock %}

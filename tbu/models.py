@@ -1,9 +1,8 @@
 from django.db import models
 from datetime import date
 
-current_km = 123456
 
-class Ture(models.Model):
+class Tankning(models.Model):
     dato = models.DateField(default=date.today)
-    km_count = models.IntegerField(default=current_km)
+    pris = models.FloatField()
     user_id = models.CharField(max_length=50)

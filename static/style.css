@@ -63,14 +63,7 @@ width: 170px;
   color: white;
 }
 
-.radioselect {
+.checkbox {
   list-style-type: none;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-  padding: 0;
-}
-
-.p {
-  margin-block-start: 0em;
-  margin-block-end: 0em;
+  padding-left: 20px;
 }
