@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1 class="header">Ikke registreret!</h1>
-<p class="header">Husk at tjekke en eller flere brugere af</p>
+<p class="header">{{error}}</p>
 <div class="center">
     <a href="{% url 'index' %}" class="button">Prøv igen</a>
 </div>

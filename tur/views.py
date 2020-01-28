@@ -1,9 +1,8 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from tur.forms import TurForm
-from db_functions.db_data import get_username
+from db_functions.db_data import get_usernames, get_current_km
 
-km_count = 123356
 
 class CreateTur(TemplateView):
     template_name = 'tur.html'
@@ -16,12 +15,17 @@ class CreateTur(TemplateView):
         form = TurForm(request.POST)
         #print(request.POST)
         if form.is_valid():
-            form.save()
             data = form.cleaned_data
-            km = data['km_count'] - km_count
-            print(get_username(data))
-            return render(request, 'tur_confirm.html', {'km': km})
+            previous_km_count = get_current_km()
+            
+            if data['km_count'] > previous_km_count:
+                form.save()
+
+                km = data['km_count'] - previous_km_count
+                return render(request, 'tur_confirm.html', {'km': km, 'users': get_usernames(data)})
+            else:
+                return render(request, 'form_error.html', {'error': 'Nuværende kilometertælleraflæsning skal være højere end den seneste!'})
             
         else:
             print('------------------------ form not valid ------------------------')
-            return render(request, 'form_error.html')
+            return render(request, 'form_error.html', {'error': 'Husk at vælge en eller flere brugere'})

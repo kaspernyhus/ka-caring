@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1 class="header">Tur registreret!</h1>
-<p class="header">Du har kørt {{km}} km.</p>
+<p class="header">{% for user in users %} {{user}} {% endfor %} har kørt {{km}} km.</p>
 <div class="center">
     <a href="{% url 'index' %}" class="button">Hjem</a>
 </div>
