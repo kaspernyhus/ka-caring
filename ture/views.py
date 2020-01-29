@@ -13,7 +13,6 @@ class CreateTur(TemplateView):
     
     def post(self, request):
         form = TurForm(request.POST)
-        #print(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             previous_km_count = get_current_km()

@@ -1,4 +1,4 @@
-from tur.models import Ture
+from ture.models import Ture
 from datetime import datetime
 from accounts.models import Kirsten, Marie, Kasper
 

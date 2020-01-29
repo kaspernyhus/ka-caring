@@ -33,10 +33,10 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'ture',
     'accounts',
     'tbu',
     'index',
-    'tur',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
