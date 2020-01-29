@@ -16,6 +16,7 @@ class CreateTankning(TemplateView):
         
         if form.is_valid():
             form.save()
+            print('----------- tankning registreret --------------')
             data = form.cleaned_data
             
             update_saldo(data['user_id'], -data['amount'])
@@ -38,6 +39,7 @@ class CreateBetaling(TemplateView):
         
         if form.is_valid():
             form.save()
+            print('----------- betaling registreret --------------')
             data = form.cleaned_data
             
             update_saldo(data['user_id'], -data['amount'])
@@ -60,6 +62,7 @@ class CreateUdgift(TemplateView):
         
         if form.is_valid():
             form.save()
+            print('----------- udgift registreret --------------')
             data = form.cleaned_data
             
             update_saldo(data['user_id'], -data['amount'])

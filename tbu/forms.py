@@ -31,7 +31,7 @@ class BetalingForm(forms.ModelForm):
     user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
     
     class Meta:
-        model = Udgift
+        model = Betaling
         fields = [
             'date', 
             'amount',
@@ -47,7 +47,7 @@ class UdgiftForm(forms.ModelForm):
     description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'rows':4, 'cols':20}))
     user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
     class Meta:
-        model = Betaling
+        model = Udgift
         fields = [
             'date', 
             'amount',

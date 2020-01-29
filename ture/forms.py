@@ -24,6 +24,8 @@ class DateInput(forms.DateInput):
 
 
 class TurForm(forms.ModelForm):
+    print('---------------------- turform -------------')
+
     current_km = get_current_km()
     
     km_count = forms.IntegerField(label='Kilometertæller', initial=current_km, widget=forms.NumberInput(attrs={'pattern': "\d*"}))
@@ -32,13 +34,13 @@ class TurForm(forms.ModelForm):
     class Meta:
         model = Ture
         fields = [
-            'dato', 
+            'date', 
             'km_count', 
             'user_id',
             'extra_pas'
         ]
         widgets = {
-            'dato': DateInput(),
+            'date': DateInput(),
         }
     
 

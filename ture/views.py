@@ -8,7 +8,8 @@ class CreateTur(TemplateView):
     template_name = 'tur.html'
     
     def get(self, request):
-        form = TurForm()
+        data = {'km_count': get_current_km()}
+        form = TurForm(initial=data)
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
