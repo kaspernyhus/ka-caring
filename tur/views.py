@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
-from django.shortcuts import render, redirect
-from tur.forms import TurForm
-from db_functions.db_data import get_usernames, get_current_km
+from django.shortcuts import render
+from .forms import TurForm
+from db_functions.db_data import get_usernames, get_current_km, update_account
 
 
 class CreateTur(TemplateView):
@@ -22,7 +22,10 @@ class CreateTur(TemplateView):
                 form.save()
 
                 km = data['km_count'] - previous_km_count
-                return render(request, 'tur_confirm.html', {'km': km, 'users': get_usernames(data['user_id'])})
+                tur_pris = km * 2.0
+                update_account(data['user_id'], tur_pris, km)
+                return render(request, 'tur_confirm.html', {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(data['user_id'])})
+            
             else:
                 return render(request, 'form_error.html', {'error': 'Nuværende kilometertælleraflæsning skal være højere end den seneste!'})
             

@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm
-from db_functions.db_data import get_usernames
+from db_functions.db_data import get_usernames, update_saldo
 
 
 class CreateTankning(TemplateView):
@@ -17,7 +17,8 @@ class CreateTankning(TemplateView):
         if form.is_valid():
             form.save()
             data = form.cleaned_data
-            print(data)
+            
+            update_saldo(data['user_id'], -data['amount'])
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
@@ -38,6 +39,8 @@ class CreateBetaling(TemplateView):
         if form.is_valid():
             form.save()
             data = form.cleaned_data
+            
+            update_saldo(data['user_id'], -data['amount'])
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
@@ -58,6 +61,8 @@ class CreateUdgift(TemplateView):
         if form.is_valid():
             form.save()
             data = form.cleaned_data
+            
+            update_saldo(data['user_id'], -data['amount'])
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
