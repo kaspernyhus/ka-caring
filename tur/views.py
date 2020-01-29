@@ -22,7 +22,7 @@ class CreateTur(TemplateView):
                 form.save()
 
                 km = data['km_count'] - previous_km_count
-                return render(request, 'tur_confirm.html', {'km': km, 'users': get_usernames(data)})
+                return render(request, 'tur_confirm.html', {'km': km, 'users': get_usernames(data['user_id'])})
             else:
                 return render(request, 'form_error.html', {'error': 'Nuværende kilometertælleraflæsning skal være højere end den seneste!'})
             

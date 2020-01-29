@@ -1,11 +1,9 @@
 from django import forms
-from .models import Tankning
+from .models import Tankning, Betaling, Udgift
 
-CHOICES=[(0,'Marie'),
-         (1,'Kirsten'),
-         (2,'Kasper'),
-         (3,'Gæst'),
-         (4,'Ved Ikke')
+CHOICES=[(0,'Kirsten'),
+         (1,'Marie'),
+         (2,'Kasper')
         ]
 
 
@@ -14,17 +12,48 @@ class DateInput(forms.DateInput):
 
 
 class TankningForm(forms.ModelForm):
-    pris = forms.FloatField(label='Pris:', widget=forms.NumberInput(attrs={'pattern': "\d*"}))
-    user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'radioselect'}))
+    amount = forms.FloatField(label='Beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
+    user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
     class Meta:
         model = Tankning
         fields = [
-            'dato', 
-            'pris', 
+            'date', 
+            'amount', 
             'user_id'
         ]
         widgets = {
-            'dato': DateInput(),
+            'date': DateInput(),
         }
     
 
+class BetalingForm(forms.ModelForm):
+    amount = forms.FloatField(label='Overført beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
+    user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
+    
+    class Meta:
+        model = Udgift
+        fields = [
+            'date', 
+            'amount',
+            'user_id'
+        ]
+        widgets = {
+            'date': DateInput(),
+        }
+
+
+class UdgiftForm(forms.ModelForm):
+    amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
+    description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'rows':4, 'cols':20}))
+    user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
+    class Meta:
+        model = Betaling
+        fields = [
+            'date', 
+            'amount',
+            'description',
+            'user_id'
+        ]
+        widgets = {
+            'date': DateInput(),
+        }
