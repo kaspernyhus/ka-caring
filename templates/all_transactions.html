@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+
+    <h1 class="header">Alle transaktioner</h1>
+
+    <table style="table-layout: fixed;">
+        <colgroup>
+            <col  style="width: 8%;">
+            <col  style="width: 5%;">
+            <col  style="width: 15%;">
+            <col  style="width: 5%;">
+            <col  style="width: 5%;">
+            <col  style="width: 15%;">
+            <col  style="width: 5%;">
+        </colgroup>
+
+        <!-- Table Head -->
+        <thead>
+            <tr>
+                <th>
+                    Dato
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Bruger(e)
+                </th>
+                <th>
+                    Antal km
+                </th>
+                <th>
+                    Beløb
+                </th>
+                <th>
+                    Beskrivelse
+                </th>
+                <th>
+                    Rediger
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+                <tr>
+                    <td>
+                        {{entry.date}}
+                    </td>
+                    <td>
+                        {{entry.type}}
+                    </td>
+                    <td>
+                        {% for user in entry.users %} {{user}} {% endfor %}
+                    </td>
+                    <td>
+                        {{entry.km}}
+                    </td>
+                    <td>
+                        {% if entry.amount %} {{entry.amount|floatformat:2}} kr. {% endif %}
+                    </td>
+                    <td>
+                        {{entry.description}}
+                    </td>
+                    <td>
+                        <a href="#">X</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table >
+</div>
+{% endblock %}

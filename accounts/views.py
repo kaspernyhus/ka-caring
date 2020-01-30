@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from db_functions.db_data import get_saldo, get_user_km
+from db_functions.db_data import get_saldo, get_user_km, get_all_data
 
 
 def oversigt(request):
@@ -16,4 +16,8 @@ def oversigt(request):
     return render(request, 'oversigt.html', context)
 
 
+def show_all_transactions(request):
+    all_data = get_all_data()
+    context = {'entries': all_data}
 
+    return render(request, 'all_transactions.html', context)

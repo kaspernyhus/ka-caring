@@ -3,8 +3,13 @@ body {
     font-family:Avenir;
    }
 
+.container {
+  padding: 30px;
+}
+
 .header {
     text-align: center;
+    margin-block-end: 0.2em;
 }
 
 .footer {
@@ -66,4 +71,38 @@ width: 170px;
 .checkbox {
   list-style-type: none;
   padding-left: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid rgb(72, 196, 76);
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: rgb(166, 247, 169);
+}
+
+.header_link {
+  border: 2px solid black;
+  color: black;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 100%;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+p {
+  margin-block-start: 0em;
+  margin-block-end: 0em;
 }

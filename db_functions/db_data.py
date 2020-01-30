@@ -1,6 +1,8 @@
 from ture.models import Ture
+from tbu.models import Tankning, Betaling, Udgift
 from datetime import datetime
 from accounts.models import Kirsten, Marie, Kasper
+from kacaring.km_price import km_price 
 
 
 def get_usernames(id_list):
@@ -10,7 +12,6 @@ def get_usernames(id_list):
     if isinstance(active_users, int):
         return users[active_users]
     else:
-        active_users = eval(id_list)
         user_names = [users[int(user)] for user in active_users]
         return user_names
          
@@ -39,6 +40,29 @@ def get_user_km(user_id):
     elif user_id == 2:
         db_data = Kasper.objects.latest('id')
     return db_data.km
+
+
+def get_all_data():
+    all_data = []
+
+    ture = Ture.objects.all().order_by('-id')
+    for tur in ture:
+        all_data.append({'date': tur.date, 'km_count': tur.km_count, 'users': get_usernames(tur.user_id), 'type': 'Kørsel'})
+    
+    tankninger = Tankning.objects.all().order_by('-id')
+    for tankning in tankninger:
+        all_data.append({'date': tankning.date, 'amount': tankning.amount, 'users': [get_usernames(tankning.user_id)], 'type': 'Tankning'})
+    
+    betalinger = Betaling.objects.all().order_by('-id')
+    for betaling in betalinger:
+        all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Betaling'})
+    
+    udgifter = Udgift.objects.all().order_by('-id')
+    for udgift in udgifter:
+        all_data.append({'date': udgift.date, 'amount': udgift.amount, 'description': udgift.description, 'users': [get_usernames(udgift.user_id)], 'type': 'Udgift'})
+    
+    all_data_sorted = sorted(all_data, key=lambda k: k['date'], reverse=True)
+    return all_data_sorted
 
 
 def update_saldo(user_id, amount):
