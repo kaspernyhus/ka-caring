@@ -7,3 +7,5 @@ class Ture(models.Model):
     km_count = models.IntegerField()
     user_id = models.CharField(max_length=50)
     extra_pas = models.CharField(blank=True, max_length=50)
+    delta_km = models.IntegerField()
+    price = models.FloatField()

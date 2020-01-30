@@ -19,10 +19,15 @@ class CreateTur(TemplateView):
             previous_km_count = get_current_km()
             
             if data['km_count'] > previous_km_count:
-                form.save()
+                form_obj = form.save(commit=False)
 
                 km = data['km_count'] - previous_km_count
                 tur_pris = km * 2.0
+
+                form_obj.delta_km = km
+                form_obj.price = tur_pris
+                form_obj.save()
+
                 update_account(data['user_id'], tur_pris, km)
                 return render(request, 'tur_confirm.html', {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(data['user_id'])})
             
