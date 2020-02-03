@@ -3,7 +3,8 @@ from .models import Tankning, Betaling, Udgift
 
 CHOICES=[(0,'Kirsten'),
          (1,'Marie'),
-         (2,'Kasper')
+         (2,'Kasper'),
+         (3,'Farmor & Farfar')
         ]
 
 
@@ -17,8 +18,8 @@ class TankningForm(forms.ModelForm):
     class Meta:
         model = Tankning
         fields = [
-            'date', 
-            'amount', 
+            'date',
+            'amount',
             'user_id'
         ]
         widgets = {
@@ -45,7 +46,7 @@ class BetalingForm(forms.ModelForm):
 class UdgiftForm(forms.ModelForm):
     amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
     description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'rows':4, 'cols':20}))
-    user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
+    user_id = forms.CharField(label='', widget=forms.CheckboxSelectMultiple(choices=CHOICES, attrs={'class': 'checkbox'}))
     class Meta:
         model = Udgift
         fields = [

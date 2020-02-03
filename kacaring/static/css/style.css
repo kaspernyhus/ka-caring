@@ -4,7 +4,9 @@ body {
    }
 
 .container {
-  padding: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 30px;
 }
 
 .header {
@@ -38,8 +40,6 @@ width: 170px;
     font-size: 135%;
     margin: 4px 2px;
     width: 80px;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
     cursor: pointer;
   }
 
@@ -89,20 +89,14 @@ tr:nth-child(even) {
 }
 
 .header_link {
-  border: 2px solid black;
   color: black;
-  padding: 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 100%;
-  margin: 4px 2px;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
   cursor: pointer;
 }
 
 p {
   margin-block-start: 0em;
-  margin-block-end: 0em;
+  margin-block-end: 5px;
 }

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
 
-    <h1 class="header">Alle transaktioner</h1>
+    <h1 class="header">Transaktioner {{user}}</h1>
 
     <table style="table-layout: fixed;">
         <colgroup>
@@ -64,11 +64,49 @@
                         {{entry.description}}
                     </td>
                     <td>
-                        <a href="transactionID{{entry.transaction_id}}">X</a>
+                        <a href="#">X</a>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table >
+
+    <table style="table-layout: fixed;">
+        <colgroup>
+            <col  style="width: 8%;">
+            <col  style="width: 5%;">
+            <col  style="width: 15%;">
+            <col  style="width: 5%;">
+            <col  style="width: 8%;">
+            <col  style="width: 15%;">
+            <col  style="width: 5%;">
+        </colgroup>
+        
+        <tr>
+            <td>
+                1
+            </td>
+            <td>
+                2
+            </td>
+            <td>
+                3
+            </td>
+            <td>
+                {{user_km}} km
+            </td>
+            <td>
+                5
+            </td>
+            <td>
+                6
+            </td>
+            <td>
+                7
+            </td>
+        </tr>
+    
+    </table>
+
 </div>
 {% endblock %}

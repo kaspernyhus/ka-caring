@@ -1,7 +1,8 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import TurForm
-from db_functions.db_data import get_usernames, get_current_km, update_account
+from kacaring.km_price import km_price
+from db_functions.db_data import get_usernames, get_current_km, update_user_account, update_accounts
 
 
 class CreateTur(TemplateView):
@@ -22,13 +23,17 @@ class CreateTur(TemplateView):
                 form_obj = form.save(commit=False)
 
                 km = data['km_count'] - previous_km_count
-                tur_pris = km * 2.0
+                tur_pris = km * km_price
 
                 form_obj.delta_km = km
                 form_obj.price = tur_pris
-                form_obj.save()
+                
+                data.update({'amount': tur_pris})
+                new_id = update_accounts(data, 'Tur', km=km)
 
-                update_account(data['user_id'], tur_pris, km)
+                form_obj.transaction_id = new_id                
+                form_obj.save()
+                
                 return render(request, 'tur_confirm.html', {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(data['user_id'])})
             
             else:

@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm
-from db_functions.db_data import get_usernames, update_saldo
+from db_functions.db_data import get_usernames, update_user_account, delete_transaction, update_accounts
 
 
 class CreateTankning(TemplateView):
@@ -15,11 +15,14 @@ class CreateTankning(TemplateView):
         form = TankningForm(request.POST)
         
         if form.is_valid():
-            form.save()
             print('----------- tankning registreret --------------')
             data = form.cleaned_data
+            new_id = update_accounts(data, 'Tankning')
             
-            update_saldo(data['user_id'], -data['amount'])
+            save_with_id = form.save(commit=False)
+            save_with_id.transaction_id = new_id
+            save_with_id.save()
+
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
@@ -38,11 +41,14 @@ class CreateBetaling(TemplateView):
         form = BetalingForm(request.POST)
         
         if form.is_valid():
-            form.save()
             print('----------- betaling registreret --------------')
             data = form.cleaned_data
+            new_id = update_accounts(data, 'Betaling')
             
-            update_saldo(data['user_id'], -data['amount'])
+            save_with_id = form.save(commit=False)
+            save_with_id.transaction_id = new_id
+            save_with_id.save()
+            
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
@@ -61,11 +67,14 @@ class CreateUdgift(TemplateView):
         form = UdgiftForm(request.POST)
         
         if form.is_valid():
-            form.save()
             print('----------- udgift registreret --------------')
             data = form.cleaned_data
+            new_id = update_accounts(data, 'Udgift')
             
-            update_saldo(data['user_id'], -data['amount'])
+            save_with_id = form.save(commit=False)
+            save_with_id.transaction_id = new_id
+            save_with_id.save()
+            
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')

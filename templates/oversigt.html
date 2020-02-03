@@ -1,27 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class="header">
-<a href="{% url 'show_all_transactions' %}" class="header_link">Oversigt</a>
-</h1>
+<div class="container">
+    <h1 class="header">
+    <a href="{% url 'show_all_transactions' %}" class="header_link">Oversigt</a>
+    </h1>
+    
+    <h2 class="header">
+        <a href="{% url 'show_user_transactions' %}" class="header_link">Kirsten</a>
+    </h2>
+    <p class="header">{{kirsten_saldo}} kr.</p>
+    <p class="header">Kørt i alt: {{kirsten_km}} km.</p>
 
-<h2 class="header">
-    <a href="#" class="header_link">Kirsten</a>
-</h2>
-<p class="header">Saldo: {{kirsten_saldo}} kr.</p>
-<p class="header">Kørt i alt: {{kirsten_km}} km.</p>
+    <h2 class="header">
+        <a href="{% url 'show_user_transactions' %}" class="header_link">Marie</a>
+    </h2>
+    <p class="header">{{marie_saldo}} kr.</p>
+    <p class="header">Kørt i alt: {{marie_km}} km.</p>
 
-<h2 class="header">
-    <a href="#" class="header_link">Marie</a>
-</h2>
-<p class="header">Saldo: {{marie_saldo}} kr.</p>
-<p class="header">Kørt i alt: {{marie_km}} km.</p>
+    <h2 class="header">
+        <a href="{% url 'show_user_transactions' %}" class="header_link">Kasper</a>
+    </h2>
+    <p class="header">{{kasper_saldo}} kr.</p>
+    <p class="header">Kørt i alt: {{kasper_km}} km.</p>
 
-<h2 class="header">
-    <a href="#" class="header_link">Kasper</a>
-</h2>
-<p class="header">Saldo: {{kasper_saldo}} kr.</p>
-<p class="header">Kørt i alt: {{kasper_km}} km.</p>
-
+    <h2 class="header">
+        <a href="{% url 'show_user_transactions' %}" class="header_link">Farmor & Farfar</a>
+    </h2>
+    <p class="header">{{farmor_saldo}} kr.</p>
+    <p class="header">Kørt i alt: {{farmor_km}} km.</p>
+</div>
 
 {% endblock %}

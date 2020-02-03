@@ -6,16 +6,19 @@ from db_functions.db_data import get_current_km
 CHOICES=[(0,'Kirsten'),
          (1,'Marie'),
          (2,'Kasper'),
-         (3,'Tur mangler')
+         (3,'Farmor & Farfar'),
+         (4,'Tur mangler')
         ]
 
 EKSTRA=[(0,''),
         (1,'Kirsten +1'),
         (2,'Marie +1'),
         (3,'Kasper +1'),
-        (4,'Kirsten +2'),
-        (5,'Marie +2'),
-        (6,'Kasper +2')
+        (4,'Farmor & Farfar +1'),
+        (5,'Kirsten +2'),
+        (6,'Marie +2'),
+        (7,'Kasper +2'),
+        (8,'Farmor & Farfar +2')
         ]
 
 
@@ -24,10 +27,7 @@ class DateInput(forms.DateInput):
 
 
 class TurForm(forms.ModelForm):
-    print('---------------------- turform -------------')
-
     current_km = get_current_km()
-    
     km_count = forms.IntegerField(label='Kilometertæller', initial=current_km, widget=forms.NumberInput(attrs={'pattern': "\d*"}))
     user_id = forms.CharField(label='', widget=forms.CheckboxSelectMultiple(choices=CHOICES, attrs={'class': 'checkbox'}))
     extra_pas = forms.CharField(label='Ekstra passager', widget=forms.Select(choices=EKSTRA))
