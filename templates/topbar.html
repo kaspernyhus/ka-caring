@@ -1,0 +1,17 @@
+
+<nav class="navbar sticky-top">
+    {% if user.is_authenticated %}
+    <ul class="navbar-nav">
+        <li>
+            <p>{{ user.username }}</p>
+        </li>
+    </ul>
+    {% else %}
+    <ul class="navbar-nav">
+        <li>
+            <a href="{% url 'login' %}">Login</a>
+        </li>
+    </ul>
+    {% endif %}
+</nav>
+

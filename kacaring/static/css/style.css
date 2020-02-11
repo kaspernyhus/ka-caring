@@ -1,6 +1,7 @@
 body {
-    background-color: rgb(122, 255, 126);
-    font-family:Avenir;
+    background: #a7fd96;
+    font-family: Avenir;
+    
    }
 
 .container {
@@ -25,28 +26,76 @@ body {
     }
 
 .center {
-margin: auto;
-width: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
 }
 
 .button {
-    background-color: rgb(208, 253, 210);
-    border: 2px solid black;
-    color: black;
-    padding: 16px 44px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 135%;
-    margin: 4px 2px;
-    width: 80px;
-    cursor: pointer;
-  }
+  background: #F1FDF1;
+  border: 2px solid rgba(13, 91, 35, 0.33);
+  box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.01), 0px 6px 5px rgba(0, 0, 0, 0.02), 0px 2px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 4px; 
+  
+  /* background-color: rgb(208, 253, 210); */
+  /* border: 2px solid black; */
+  color: black;
+  padding: 16px 44px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 135%;
+  width: 100%;
+  max-width: 360px;
+  transition: all 170ms ease-in-out;
+  cursor: pointer;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.button + .button {
+  margin-top: 8px;
+}
+
+.button > svg {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+}
 
 .button:hover {
   background-color: #4CAF50;
   color: white;
 }
+
+
+.sml-button {
+  background: #F1FDF1;
+  border: 2px solid rgba(13, 91, 35, 0.33);
+  box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.01), 0px 6px 5px rgba(0, 0, 0, 0.02), 0px 2px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 4px; 
+  
+  /* background-color: rgb(208, 253, 210); */
+  /* border: 2px solid black; */
+  color: black;
+  padding: 16px 44px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 135%;
+  width: 70%;
+  max-width: 360px;
+  transition: all 170ms ease-in-out;
+  cursor: pointer;
+  box-sizing: border-box;
+  position: relative;
+}
+
+
+
 
 .form_button {
   background-color: rgb(208, 253, 210);
@@ -100,3 +149,38 @@ p {
   margin-block-start: 0em;
   margin-block-end: 5px;
 }
+
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.bg-primary {
+  background-color: #10284e !important;
+}
+
+.navbar {
+  /* position: relative; */
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+  background-color: #96e686;
+  padding: 0.1rem 0.3rem;
+  float: right;
+}
+
+.navbar-nav {
+  
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none; }
+  .navbar-nav .nav-link {
+    padding-right: 0;
+    padding-left: 0; }
+  .navbar-nav .dropdown-menu {
+    position: static;
+    float: none; }

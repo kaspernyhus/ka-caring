@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import TurForm
 from kacaring.km_price import km_price
-from db_functions.db_data import get_usernames, get_current_km, update_user_account, update_accounts
+from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts
 
 
 class CreateTur(TemplateView):
@@ -11,6 +11,7 @@ class CreateTur(TemplateView):
     def get(self, request):
         data = {'km_count': get_current_km()}
         form = TurForm(initial=data)
+        form.fields['user_id'].initial = get_userID(request.user) # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):

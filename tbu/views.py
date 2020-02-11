@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm
-from db_functions.db_data import get_usernames, update_user_account, delete_transaction, update_accounts
+from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts
 
 
 class CreateTankning(TemplateView):
@@ -9,6 +9,7 @@ class CreateTankning(TemplateView):
     
     def get(self, request):
         form = TankningForm()
+        form.fields['user_id'].initial = get_userID(request.user) # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
@@ -35,6 +36,7 @@ class CreateBetaling(TemplateView):
 
     def get(self, request):
         form = BetalingForm()
+        form.fields['user_id'].initial = get_userID(request.user) # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
@@ -61,6 +63,7 @@ class CreateUdgift(TemplateView):
 
     def get(self, request):
         form = UdgiftForm()
+        form.fields['user_id'].initial = get_userID(request.user) # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):

@@ -23,7 +23,21 @@ def get_usernames(id_list):
     else:
         user_names = [users[int(user)] for user in active_users]
         return user_names
-         
+
+
+def get_userID(user):
+    user = str(user)
+    if user == 'Kirsten':
+        return '0'
+    elif user == 'Marie':
+        return '1'
+    elif user == 'Kasper':
+        return '2'
+    elif user == 'FarMor':
+        return '3'
+    else:
+        return None
+
 
 def get_current_km():
     db_data = Ture.objects.latest('id')

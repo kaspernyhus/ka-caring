@@ -1,6 +1,7 @@
 from django import forms
 from .models import Tankning, Betaling, Udgift
 
+
 CHOICES=[(0,'Kirsten'),
          (1,'Marie'),
          (2,'Kasper'),
@@ -13,8 +14,6 @@ class DateInput(forms.DateInput):
 
 
 class TankningForm(forms.ModelForm):
-    amount = forms.FloatField(label='Beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
-    user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
     class Meta:
         model = Tankning
         fields = [
@@ -25,7 +24,9 @@ class TankningForm(forms.ModelForm):
         widgets = {
             'date': DateInput(),
         }
-    
+    amount = forms.FloatField(label='Beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
+    user_id = forms.CharField(label='', initial='0', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
+
 
 class BetalingForm(forms.ModelForm):
     amount = forms.FloatField(label='Overført beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
