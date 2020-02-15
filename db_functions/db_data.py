@@ -6,8 +6,8 @@ from accounts.models import Kirsten, Marie, Kasper, FarMor
 from kacaring.km_price import km_price
 
 
-def _create_transaction(action_category):
-    new_id = TransactionId(action=action_category)
+def _create_transaction(request, action_category):
+    new_id = TransactionId(user=request.user, action=action_category)
     new_id.save()
     
     id_obj = TransactionId.objects.latest('transaction_id')
@@ -64,28 +64,50 @@ def get_user_km(user_id):
     return _get_latest_entry(user_id).km
 
 
+def get_db_entry(search_key):
+    try:
+        db_entry = Ture.objects.get(transaction_id=search_key)
+        return db_entry
+    except Ture.DoesNotExist:
+        pass
+    try:
+        db_entry = Tankning.objects.get(transaction_id=search_key)
+        return db_entry
+    except Tankning.DoesNotExist:
+        pass
+    try:
+        db_entry = Betaling.objects.get(transaction_id=search_key)
+        return db_entry
+    except Betaling.DoesNotExist:
+        pass
+    try:
+        db_entry = Udgift.objects.get(transaction_id=search_key)
+        return db_entry
+    except Udgift.DoesNotExist:
+        return None
+   
+
 def get_all_data():
     all_data = []
 
     ture = Ture.objects.all().order_by('-id')
     for tur in ture:
-        all_data.append({'date': tur.date, 'km_count': tur.km_count, 'users': get_usernames(tur.user_id), 'type': 'Kørsel', 'km': tur.delta_km, 'amount': tur.price, 'transaction_id': tur.transaction_id})
+        all_data.append({'date': tur.date, 'km_count': tur.km_count, 'users': get_usernames(tur.user_id), 'type': 'Kørsel', 'km': tur.delta_km, 'amount': tur.price, 'table_id': tur.id, 'transaction_id': tur.transaction_id})
     
     tankninger = Tankning.objects.all().order_by('-id')
     for tankning in tankninger:
-        all_data.append({'date': tankning.date, 'amount': -tankning.amount, 'users': [get_usernames(tankning.user_id)], 'type': 'Tankning', 'transaction_id': tankning.transaction_id})
+        all_data.append({'date': tankning.date, 'amount': -tankning.amount, 'users': [get_usernames(tankning.user_id)], 'type': 'Tankning', 'table_id': tankning.id, 'transaction_id': tankning.transaction_id})
     
     betalinger = Betaling.objects.all().order_by('-id')
     for betaling in betalinger:
-        all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Betaling', 'transaction_id': betaling.transaction_id})
+        all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Betaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
     
     udgifter = Udgift.objects.all().order_by('-id')
     for udgift in udgifter:
-        all_data.append({'date': udgift.date, 'amount': udgift.amount, 'description': udgift.description, 'users': [get_usernames(udgift.user_id)], 'type': 'Udgift', 'transaction_id': udgift.transaction_id})
+        all_data.append({'date': udgift.date, 'amount': udgift.amount, 'description': udgift.description, 'users': [get_usernames(udgift.user_id)], 'type': 'Udgift', 'table_id': udgift.id, 'transaction_id': udgift.transaction_id})
     
     all_data_sorted = sorted(all_data, key=lambda k: k['date'], reverse=True)
     return all_data_sorted
-
 
 
 def update_user_account(transaction_id, user_id, amount, km, category):
@@ -95,7 +117,7 @@ def update_user_account(transaction_id, user_id, amount, km, category):
         db_data = Kirsten.objects.latest('id')
         new_saldo = db_data.saldo + amount
         new_km = db_data.km + km
-        new_entry = Kirsten(saldo=new_saldo, km=new_km, category=category, transaction_id=transaction_id)
+        new_entry = Kirsten(saldo=new_saldo, amount=amount, km=new_km, category=category, transaction_id=transaction_id)
         new_entry.save()
         print('----------- Kirsten --------------')
         
@@ -103,7 +125,7 @@ def update_user_account(transaction_id, user_id, amount, km, category):
         db_data = Marie.objects.latest('id')
         new_saldo = db_data.saldo + amount
         new_km = db_data.km + km
-        new_entry = Marie(saldo=new_saldo, km=new_km, category=category, transaction_id=transaction_id)
+        new_entry = Marie(saldo=new_saldo, amount=amount, km=new_km, category=category, transaction_id=transaction_id)
         new_entry.save()
         print('----------- Marie --------------')
 
@@ -111,7 +133,7 @@ def update_user_account(transaction_id, user_id, amount, km, category):
         db_data = Kasper.objects.latest('id')
         new_saldo = db_data.saldo + amount
         new_km = db_data.km + km
-        new_entry = Kasper(saldo=new_saldo, km=new_km, category=category, transaction_id=transaction_id)
+        new_entry = Kasper(saldo=new_saldo, amount=amount, km=new_km, category=category, transaction_id=transaction_id)
         new_entry.save()
         print('----------- Kasper --------------')
 
@@ -119,7 +141,7 @@ def update_user_account(transaction_id, user_id, amount, km, category):
         db_data = FarMor.objects.latest('id')
         new_saldo = db_data.saldo + amount
         new_km = db_data.km + km
-        new_entry = FarMor(saldo=new_saldo, km=new_km, category=category, transaction_id=transaction_id)
+        new_entry = FarMor(saldo=new_saldo, amount=amount, km=new_km, category=category, transaction_id=transaction_id)
         new_entry.save()
         print('----------- Farmor & Farfar --------------')
 
@@ -127,8 +149,8 @@ def update_user_account(transaction_id, user_id, amount, km, category):
         print('----------- error: user ID --------------')
 
 
-def update_accounts(form_data, category, km=0):
-    new_id = _create_transaction(category)
+def update_accounts(request, form_data, category, km=0):
+    new_id = _create_transaction(request, category)
     
     user_list = form_data['user_id']
     user_ids = eval(user_list)

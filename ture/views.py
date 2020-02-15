@@ -30,7 +30,7 @@ class CreateTur(TemplateView):
                 form_obj.price = tur_pris
                 
                 data.update({'amount': tur_pris})
-                new_id = update_accounts(data, 'Tur', km=km)
+                new_id = update_accounts(request, data, 'Tur', km=km)
 
                 form_obj.transaction_id = new_id                
                 form_obj.save()

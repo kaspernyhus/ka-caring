@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from db_functions.db_data import get_saldo, get_user_km, get_all_data
+from db_functions.db_data import get_saldo, get_user_km, get_all_data, get_db_entry
 
 
 def oversigt(request):
@@ -33,5 +33,7 @@ def show_user_transactions(request):
 
 
 def edit_entry(request, transaction_id):
-    context = {'transaction_id': transaction_id}
+    db_entry = get_db_entry(transaction_id)
+    print(db_entry.price)
+    context = {'date': db_entry.date, 'amount': db_entry.price, 'transaction_id': transaction_id}
     return render(request, 'edit_entries.html', context)

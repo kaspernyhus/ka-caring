@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm
 from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts
 
+from django.views.generic.edit import UpdateView
+from .models import Tankning, Betaling, Udgift
+
 
 class CreateTankning(TemplateView):
     template_name = 'tankning.html'
@@ -18,7 +21,7 @@ class CreateTankning(TemplateView):
         if form.is_valid():
             print('----------- tankning registreret --------------')
             data = form.cleaned_data
-            new_id = update_accounts(data, 'Tankning')
+            new_id = update_accounts(request, data, 'Tankning')
             
             save_with_id = form.save(commit=False)
             save_with_id.transaction_id = new_id
@@ -45,7 +48,7 @@ class CreateBetaling(TemplateView):
         if form.is_valid():
             print('----------- betaling registreret --------------')
             data = form.cleaned_data
-            new_id = update_accounts(data, 'Betaling')
+            new_id = update_accounts(request, data, 'Betaling')
             
             save_with_id = form.save(commit=False)
             save_with_id.transaction_id = new_id
@@ -72,7 +75,7 @@ class CreateUdgift(TemplateView):
         if form.is_valid():
             print('----------- udgift registreret --------------')
             data = form.cleaned_data
-            new_id = update_accounts(data, 'Udgift')
+            new_id = update_accounts(request, data, 'Udgift')
             
             save_with_id = form.save(commit=False)
             save_with_id.transaction_id = new_id
@@ -83,3 +86,17 @@ class CreateUdgift(TemplateView):
             print('------------------------ form not valid ------------------------')
             print(form.errors)
             return render(request, 'form_error.html', {'error': 'Husk at vælge en brugere'})
+
+
+class TankningUpdate(UpdateView):
+    model = Tankning
+    fields = ['date', 'amount']
+    template_name = 'edit_entries.html'
+    success_url = '/'
+
+
+class BetalingUpdate(UpdateView):
+    model = Betaling
+    fields = ['date', 'amount']
+    template_name = 'edit_entries.html'
+    success_url = '/'
