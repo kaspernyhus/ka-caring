@@ -1,1 +1,1 @@
-km_price = 2.0
+KM_PRICE = 2.0

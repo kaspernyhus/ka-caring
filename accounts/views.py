@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from db_functions.db_data import get_saldo, get_user_km, get_all_data, get_db_entry
+from db_functions.db_data import get_saldo, get_user_km, get_all_data, get_db_entry, update_user_saldo, get_usernames, get_userID, delete_transaction
 
 
 def oversigt(request):
@@ -20,20 +20,35 @@ def oversigt(request):
 def show_all_transactions(request):
     all_data = get_all_data()
     context = {'entries': all_data}
-
     return render(request, 'all_transactions.html', context)
 
 
-def show_user_transactions(request):
+def show_user_transactions(request, userIDname):
     all_data = get_all_data()
-    all_user_data = [user_data for user_data in all_data if user_data['users'] == ['Kasper']]
-    context = {'user': 'Kasper', 'user_km': get_user_km(2), 'entries': all_user_data}
+    all_user_data = []
 
+    userID = get_userID(userIDname)
+
+    for user_data in all_data:
+        for user_name in user_data['users']:
+            if user_name == userIDname:
+                print(user_data)
+                user_data['amount'] = user_data['amount'] / len(user_data['users'])
+                all_user_data.append(user_data)
+
+    context = {'user': userIDname, 'user_km': get_user_km(userID), 'entries': all_user_data, 'user_saldo': get_saldo(userID) }
     return render(request, 'user_transactions.html', context)
 
 
-def edit_entry(request, transaction_id):
-    db_entry = get_db_entry(transaction_id)
-    print(db_entry.price)
-    context = {'date': db_entry.date, 'amount': db_entry.price, 'transaction_id': transaction_id}
-    return render(request, 'edit_entries.html', context)
+
+def delete_entry(request, entry_id):
+    delete_transaction(request, entry_id)
+    return render(request, 'index.html')
+
+
+# def edit_entry(request, transaction_id):
+#     db_entry = get_db_entry(transaction_id)
+#     print(db_entry.price)
+#     context = {'date': db_entry.date, 'amount': db_entry.price, 'transaction_id': transaction_id}
+#     return render(request, 'edit_entries.html', context)
+

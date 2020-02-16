@@ -68,8 +68,8 @@
                         <a href="/tankning/update/{{ entry.table_id }}">X</a>
                         {% elif entry.type == 'Betaling' %}
                         <a href="/betaling/update/{{ entry.table_id }}">X</a>
-                        {% else %}
-                        <!-- <a href="/andet/update/{{ entry.table_id }}">X</a> -->
+                        {% elif entry.type == 'Udgift' %}
+                        <a href="/udgift/update/{{ entry.table_id }}">X</a>
                         {% endif %}
                     </td>
                 </tr>

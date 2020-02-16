@@ -1,9 +1,9 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm
-from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts
+from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts, update_user_saldo
 
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView
 from .models import Tankning, Betaling, Udgift
 
 
@@ -94,9 +94,33 @@ class TankningUpdate(UpdateView):
     template_name = 'edit_entries.html'
     success_url = '/'
 
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        update_user_saldo(instance.transaction_id, instance.user_id, -instance.amount)
+        return super(TankningUpdate, self).form_valid(form)
+
 
 class BetalingUpdate(UpdateView):
     model = Betaling
     fields = ['date', 'amount']
     template_name = 'edit_entries.html'
     success_url = '/'
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        update_user_saldo(instance.transaction_id, instance.user_id, -instance.amount)
+        return super(BetalingUpdate, self).form_valid(form)
+
+
+class UdgiftUpdate(UpdateView):
+    model = Udgift
+    fields = ['date', 'amount', 'description', 'user_id']
+    template_name = 'edit_entries.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        update_user_saldo(instance.transaction_id, instance.user_id, instance.amount)
+        return super(UdgiftUpdate, self).form_valid(form)
+
+

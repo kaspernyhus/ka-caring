@@ -7,27 +7,27 @@
     </h1>
     
     <h2 class="header">
-        <a href="{% url 'show_user_transactions' %}" class="header_link">Kirsten</a>
+        <a href="{% url 'show_user_transactions' 'Kirsten' %}" class="header_link">Kirsten</a>
     </h2>
-    <p class="header">{{kirsten_saldo}} kr.</p>
+    <p class="header">{{kirsten_saldo|floatformat:2}} kr.</p>
     <p class="header">Kørt i alt: {{kirsten_km}} km.</p>
-
+        
     <h2 class="header">
-        <a href="{% url 'show_user_transactions' %}" class="header_link">Marie</a>
+        <a href="{% url 'show_user_transactions' 'Marie' %}" class="header_link">Marie</a>
     </h2>
-    <p class="header">{{marie_saldo}} kr.</p>
+    <p class="header">{{marie_saldo|floatformat:2}} kr.</p>
     <p class="header">Kørt i alt: {{marie_km}} km.</p>
 
     <h2 class="header">
-        <a href="{% url 'show_user_transactions' %}" class="header_link">Kasper</a>
+        <a href="{% url 'show_user_transactions' 'Kasper' %}" class="header_link">Kasper</a>
     </h2>
-    <p class="header">{{kasper_saldo}} kr.</p>
+    <p class="header">{{kasper_saldo|floatformat:2}} kr.</p>
     <p class="header">Kørt i alt: {{kasper_km}} km.</p>
-
+        
     <h2 class="header">
-        <a href="{% url 'show_user_transactions' %}" class="header_link">Farmor & Farfar</a>
+        <a href="{% url 'show_user_transactions' 'FarMor' %}" class="header_link">Farmor & Farfar</a>
     </h2>
-    <p class="header">{{farmor_saldo}} kr.</p>
+    <p class="header">{{farmor_saldo|floatformat:2}} kr.</p>
     <p class="header">Kørt i alt: {{farmor_km}} km.</p>
 </div>
 

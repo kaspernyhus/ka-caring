@@ -64,7 +64,13 @@
                         {{entry.description}}
                     </td>
                     <td>
-                        <a href="#">X</a>
+                        {% if entry.type == 'Tankning' %}
+                        <a href="/tankning/update/{{ entry.table_id }}">X</a>
+                        {% elif entry.type == 'Betaling' %}
+                        <a href="/betaling/update/{{ entry.table_id }}">X</a>
+                        {% elif entry.type == 'Udgift' %}
+                        <a href="/udgift/update/{{ entry.table_id }}">X</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
@@ -84,25 +90,25 @@
         
         <tr>
             <td>
-                1
+                
             </td>
             <td>
-                2
+                
             </td>
             <td>
-                3
+                
             </td>
             <td>
-                {{user_km}} km
+                <b>{{user_km}} km</b>
             </td>
             <td>
-                5
+                <b>{{user_saldo|floatformat:2}} kr</b>
             </td>
             <td>
-                6
+                
             </td>
             <td>
-                7
+                
             </td>
         </tr>
     

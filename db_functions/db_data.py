@@ -3,7 +3,6 @@ from ture.models import Ture
 from tbu.models import Tankning, Betaling, Udgift
 from datetime import datetime
 from accounts.models import Kirsten, Marie, Kasper, FarMor
-from kacaring.km_price import km_price
 
 
 def _create_transaction(request, action_category):
@@ -26,15 +25,14 @@ def get_usernames(id_list):
 
 
 def get_userID(user):
-    user = str(user)
     if user == 'Kirsten':
-        return '0'
+        return 0
     elif user == 'Marie':
-        return '1'
+        return 1
     elif user == 'Kasper':
-        return '2'
+        return 2
     elif user == 'FarMor':
-        return '3'
+        return 3
     else:
         return None
 
@@ -53,6 +51,8 @@ def _get_latest_entry(user_id):
         db_data = Kasper.objects.latest('id')
     elif user_id == 3:
         db_data = FarMor.objects.latest('id')
+    else:
+        pass
     return db_data
 
 
@@ -104,7 +104,7 @@ def get_all_data():
     
     udgifter = Udgift.objects.all().order_by('-id')
     for udgift in udgifter:
-        all_data.append({'date': udgift.date, 'amount': udgift.amount, 'description': udgift.description, 'users': [get_usernames(udgift.user_id)], 'type': 'Udgift', 'table_id': udgift.id, 'transaction_id': udgift.transaction_id})
+        all_data.append({'date': udgift.date, 'amount': udgift.amount, 'description': udgift.description, 'users': get_usernames(udgift.user_id), 'type': 'Udgift', 'table_id': udgift.id, 'transaction_id': udgift.transaction_id})
     
     all_data_sorted = sorted(all_data, key=lambda k: k['date'], reverse=True)
     return all_data_sorted
@@ -156,7 +156,7 @@ def update_accounts(request, form_data, category, km=0):
     user_ids = eval(user_list)
     
     if isinstance(user_ids, int):
-        if category == 'Udgift':
+        if category == 'Udgift' or category == 'Tur':
             update_user_account(new_id, user_ids, form_data['amount'], km, category)
         else:
             update_user_account(new_id, user_ids, -form_data['amount'], km, category)
@@ -168,7 +168,7 @@ def update_accounts(request, form_data, category, km=0):
             user = int(user)
             user_amount = form_data['amount'] / number_of_users
             
-            if category == 'Udgift':        
+            if category == 'Udgift' or category == 'Tur':        
                 update_user_account(new_id, user, user_amount, km, category)
             else:
                 update_user_account(new_id, user, -user_amount, km, category)
@@ -176,7 +176,7 @@ def update_accounts(request, form_data, category, km=0):
     return new_id
 
 
-def delete_transaction(transaction_id):
+def delete_transaction(request, transaction_id):
     instance = TransactionId.objects.get(transaction_id=transaction_id)
     orig_timestamp = instance.timestamp
     instance.delete()
@@ -185,4 +185,94 @@ def delete_transaction(transaction_id):
     reenter_transaction.save()
 
     category = str(instance.action) + ' deleted'
-    _create_transaction(category)
+    print(category)
+    _create_transaction(request, category)
+
+
+def update_user_saldo(transaction_id, user_id, amount):
+    
+    user_ids = eval(user_id)
+    
+    
+    if isinstance(user_ids, int):
+        _update_saldo(transaction_id, user_ids, amount)
+    else:
+        number_of_users = len(user_ids)
+        for user in user_ids:
+            user_id = int(user)
+            user_amount = amount / number_of_users
+            _update_saldo(transaction_id, user_id, user_amount)
+
+
+def _update_saldo(transaction_id, user_id, amount):
+    if user_id == 0:
+        user_data = Kirsten.objects.get(transaction_id=transaction_id)
+        user_data.amount = amount
+        user_data.save()
+        _recalc_user_saldo(user_id)
+    
+    elif user_id == 1:
+        user_data = Marie.objects.get(transaction_id=transaction_id)
+        user_data.amount = amount
+        user_data.save()
+        _recalc_user_saldo(user_id)
+    
+    elif user_id == 2:
+        user_data = Kasper.objects.get(transaction_id=transaction_id)
+        user_data.amount = amount
+        user_data.save()
+        _recalc_user_saldo(user_id)
+    
+    elif user_id == 3:
+        user_data = FarMor.objects.get(transaction_id=transaction_id)
+        user_data.amount = amount
+        user_data.save()
+        _recalc_user_saldo(user_id)
+    else:
+        pass
+
+
+def _recalc_user_saldo(user_id):
+    saldo = 0.0
+
+    if user_id == 0:
+        user_data = Kirsten.objects.all().order_by('id')
+        for entry in user_data:
+            orig_timestamp = entry.timestamp
+            saldo += entry.amount
+            entry.saldo = saldo
+            entry.timestamp = orig_timestamp
+        
+            entry.save()
+    
+    elif user_id == 1:
+        user_data = Marie.objects.all().order_by('id')
+        for entry in user_data:
+            orig_timestamp = entry.timestamp
+            saldo += entry.amount
+            entry.saldo = saldo
+            entry.timestamp = orig_timestamp
+        
+            entry.save()
+    
+    elif user_id == 2:
+        user_data = Kasper.objects.all().order_by('id')
+        for entry in user_data:
+            orig_timestamp = entry.timestamp
+            saldo += entry.amount
+            entry.saldo = saldo
+            entry.timestamp = orig_timestamp
+        
+            entry.save()
+    
+    elif user_id == 3:
+        user_data = FarMor.objects.all().order_by('id')
+        for entry in user_data:
+            orig_timestamp = entry.timestamp
+            saldo += entry.amount
+            entry.saldo = saldo
+            entry.timestamp = orig_timestamp
+        
+            entry.save()
+    else:
+        pass

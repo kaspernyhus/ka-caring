@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import TurForm
-from kacaring.km_price import km_price
+from kacaring.km_price import KM_PRICE
 from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts
 
 
@@ -24,7 +24,7 @@ class CreateTur(TemplateView):
                 form_obj = form.save(commit=False)
 
                 km = data['km_count'] - previous_km_count
-                tur_pris = km * km_price
+                tur_pris = km * KM_PRICE
 
                 form_obj.delta_km = km
                 form_obj.price = tur_pris

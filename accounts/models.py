@@ -7,11 +7,11 @@ class TransactionId(models.Model):
     transaction_id = models.IntegerField(primary_key=True, blank=False, unique=True)
     timestamp = models.DateTimeField(default=timezone.now)
     action = models.CharField(max_length=100)
-    user = models.CharField(max_length=20, default='Ukendt')
+    user = models.CharField(max_length=20, default='AnonymousUser')
     
 
 class Kirsten(models.Model):
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(default=timezone.now)
     saldo = models.FloatField()
     amount = models.FloatField(default=0.0)
     km = models.IntegerField()
@@ -20,7 +20,7 @@ class Kirsten(models.Model):
 
 
 class Marie(models.Model):
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(default=timezone.now)
     saldo = models.FloatField()
     amount = models.FloatField(default=0.0)
     km = models.IntegerField()
@@ -29,7 +29,7 @@ class Marie(models.Model):
 
 
 class Kasper(models.Model):
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(default=timezone.now)
     saldo = models.FloatField()
     amount = models.FloatField(default=0.0)
     km = models.IntegerField()
@@ -38,7 +38,7 @@ class Kasper(models.Model):
 
 
 class FarMor(models.Model):
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(default=timezone.now)
     saldo = models.FloatField()
     amount = models.FloatField(default=0.0)
     km = models.IntegerField()
