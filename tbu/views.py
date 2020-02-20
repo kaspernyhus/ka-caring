@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm
 from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts, update_user_saldo
 
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import UpdateView
 from .models import Tankning, Betaling, Udgift
 
 

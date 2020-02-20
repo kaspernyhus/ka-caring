@@ -38,7 +38,7 @@
                     Beskrivelse
                 </th>
                 <th>
-                    Rediger
+                    
                 </th>
             </tr>
         </thead>
@@ -65,12 +65,16 @@
                     </td>
                     <td>
                         {% if entry.type == 'Tankning' %}
-                        <a href="/tankning/update/{{ entry.table_id }}">X</a>
+                        <a href="/tankning/update/{{ entry.table_id }}" class="xsml-button">Edit</a>
                         {% elif entry.type == 'Betaling' %}
-                        <a href="/betaling/update/{{ entry.table_id }}">X</a>
+                        <a href="/betaling/update/{{ entry.table_id }}" class="xsml-button">Edit</a>
                         {% elif entry.type == 'Udgift' %}
-                        <a href="/udgift/update/{{ entry.table_id }}">X</a>
+                        <a href="/udgift/update/{{ entry.table_id }}" class="xsml-button">Edit</a>
+                        {% elif entry.type == 'Kørsel' %}
+                        <a href="/tur/update/{{ entry.table_id }}" class="xsml-button">Edit</a>
+                        
                         {% endif %}
+                        <a href="{% url 'delete_trans' entry.transaction_id %}" class="xsml-button">Slet</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -95,6 +95,27 @@ body {
 }
 
 
+.xsml-button {
+  background: #F1FDF1;
+  border: 2px solid rgba(13, 91, 35, 0.33);
+  box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.01), 0px 6px 5px rgba(0, 0, 0, 0.02), 0px 2px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 4px; 
+  
+  /* background-color: rgb(208, 253, 210); */
+  /* border: 2px solid black; */
+  color: black;
+  
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 60%;
+  width: 40%;
+  max-width: 360px;
+  transition: all 170ms ease-in-out;
+  cursor: pointer;
+  box-sizing: border-box;
+  position: relative;
+}
 
 
 .form_button {

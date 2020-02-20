@@ -2,7 +2,10 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import TurForm
 from kacaring.km_price import KM_PRICE
-from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts
+from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts, update_user_saldo, recalc_ture
+
+from django.views.generic.edit import UpdateView
+from .models import Ture
 
 
 class CreateTur(TemplateView):
@@ -43,3 +46,23 @@ class CreateTur(TemplateView):
         else:
             print('------------------------ form not valid ------------------------')
             return render(request, 'form_error.html', {'error': 'Husk at vælge en eller flere brugere'})
+
+
+class TurUpdate(UpdateView):
+    model = Ture
+    fields = ['date', 'km_count', 'user_id', 'extra_pas', 'price']
+    template_name = 'edit_entries.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        
+        # recalc other tur data
+        data = Ture.objects.get(id=instance.id)
+        new_delta_km = data.delta_km + instance.km_count - data.km_count
+        instance.delta_km = new_delta_km
+        instance.price = new_delta_km * KM_PRICE
+
+
+        # update_user_saldo(instance.transaction_id, instance.user_id, instance.amount)
+        return super(TurUpdate, self).form_valid(form)

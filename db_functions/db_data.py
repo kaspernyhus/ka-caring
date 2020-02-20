@@ -3,6 +3,7 @@ from ture.models import Ture
 from tbu.models import Tankning, Betaling, Udgift
 from datetime import datetime
 from accounts.models import Kirsten, Marie, Kasper, FarMor
+from kacaring import km_price
 
 
 def _create_transaction(request, action_category):

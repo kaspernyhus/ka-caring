@@ -1,17 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class="header">Rediger indtastet</h1>
+<h1 class="header">Slet indtastet</h1>
 
 <div class="center">
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-    <button type="submit" class="button">Opdater</button>
+        <p>Er du sikker?</p>
+    <button type="submit" class="button">Slet</button>
     </form>
-    
 </div>
-
-
 
 {% endblock %}
