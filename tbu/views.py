@@ -12,7 +12,8 @@ class CreateTankning(TemplateView):
     
     def get(self, request):
         form = TankningForm()
-        form.fields['user_id'].initial = get_userID(request.user) # auto check current user logged in
+        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
+        
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
@@ -39,7 +40,7 @@ class CreateBetaling(TemplateView):
 
     def get(self, request):
         form = BetalingForm()
-        form.fields['user_id'].initial = get_userID(request.user) # auto check current user logged in
+        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
@@ -66,7 +67,7 @@ class CreateUdgift(TemplateView):
 
     def get(self, request):
         form = UdgiftForm()
-        form.fields['user_id'].initial = get_userID(request.user) # auto check current user logged in
+        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):

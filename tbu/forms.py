@@ -25,7 +25,7 @@ class TankningForm(forms.ModelForm):
             'date': DateInput(),
         }
     amount = forms.FloatField(label='Beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
-    user_id = forms.CharField(label='', initial='0', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
+    user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
 
 
 class BetalingForm(forms.ModelForm):

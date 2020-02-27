@@ -14,7 +14,7 @@ class CreateTur(TemplateView):
     def get(self, request):
         data = {'km_count': get_current_km()}
         form = TurForm(initial=data)
-        form.fields['user_id'].initial = get_userID(request.user) # auto check current user logged in
+        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
