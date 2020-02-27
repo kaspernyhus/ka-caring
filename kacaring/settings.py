@@ -26,7 +26,7 @@ SECRET_KEY = '2!7b2@1*hh(-0b5evx5%#=$)(^s4#g7287g(tmkdw98&o&igm4'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'kacaring.pythonanywhere.com',
+    'http://kacaring.pythonanywhere.com/',
     'localhost',
     '192.168.0.38',
     '192.168.1.17',
