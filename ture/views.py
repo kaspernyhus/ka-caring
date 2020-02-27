@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import TurForm
 from kacaring.km_price import KM_PRICE
-from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts, update_user_saldo, recalc_ture
+from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts, update_user_saldo, update_user_km
 
 from django.views.generic.edit import UpdateView
 from .models import Ture
@@ -50,7 +50,7 @@ class CreateTur(TemplateView):
 
 class TurUpdate(UpdateView):
     model = Ture
-    fields = ['date', 'km_count', 'user_id', 'extra_pas', 'price']
+    fields = ['date', 'km_count', 'user_id', 'extra_pas']
     template_name = 'edit_entries.html'
     success_url = '/'
 
@@ -63,6 +63,6 @@ class TurUpdate(UpdateView):
         instance.delta_km = new_delta_km
         instance.price = new_delta_km * KM_PRICE
 
-
-        # update_user_saldo(instance.transaction_id, instance.user_id, instance.amount)
+        update_user_km(instance.transaction_id, instance.user_id, instance.delta_km, instance.price)
+        
         return super(TurUpdate, self).form_valid(form)

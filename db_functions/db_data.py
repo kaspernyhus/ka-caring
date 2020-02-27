@@ -194,7 +194,6 @@ def update_user_saldo(transaction_id, user_id, amount):
     
     user_ids = eval(user_id)
     
-    
     if isinstance(user_ids, int):
         _update_saldo(transaction_id, user_ids, amount)
     else:
@@ -229,6 +228,54 @@ def _update_saldo(transaction_id, user_id, amount):
         user_data.amount = amount
         user_data.save()
         _recalc_user_saldo(user_id)
+    else:
+        pass
+
+
+def _update_km(transaction_id, user_id, delta_km):
+    if user_id == 0:
+        user_data = Kirsten.objects.get(transaction_id=transaction_id)
+        try:
+            prior_entry = Kirsten.objects.get(id=user_data.id - 1)
+            last_km = prior_entry.km_count
+            user_data.km_count = last_km + delta_km
+            user_data.save()
+            _recalc_user_saldo(user_id)
+        except:
+            pass
+        
+    elif user_id == 1:
+        user_data = Marie.objects.get(transaction_id=transaction_id)
+        try:
+            prior_entry = Marie.objects.get(id=user_data.id - 1)
+            last_km = prior_entry.km_count
+            user_data.km_count = last_km + delta_km
+            user_data.save()
+            _recalc_user_saldo(user_id)
+        except:
+            pass
+    
+    elif user_id == 2:
+        user_data = Kasper.objects.get(transaction_id=transaction_id)
+        try:
+            prior_entry = Kasper.objects.get(id=user_data.id - 1)
+            last_km = prior_entry.km_count
+            user_data.km_count = last_km + delta_km
+            user_data.save()
+            _recalc_user_saldo(user_id)
+        except:
+            pass
+    
+    elif user_id == 3:
+        user_data = FarMor.objects.get(transaction_id=transaction_id)
+        try:
+            prior_entry = FarMor.objects.get(id=user_data.id - 1)
+            last_km = prior_entry.km_count
+            user_data.km_count = last_km + delta_km
+            user_data.save()
+            _recalc_user_saldo(user_id)
+        except:
+            pass
     else:
         pass
 
@@ -277,3 +324,19 @@ def _recalc_user_saldo(user_id):
             entry.save()
     else:
         pass
+
+def update_user_km(transaction_id, user_id, delta_km, price):
+    user_ids = eval(user_id)
+    
+    if isinstance(user_ids, int):
+        amount = price
+        _update_saldo(transaction_id, user_ids, amount)
+        _update_km(transaction_id, user_ids, delta_km)
+    else:
+        number_of_users = len(user_ids)
+        for user in user_ids:
+            user_id = int(user)
+            user_amount = price / number_of_users
+            _update_saldo(transaction_id, user_id, user_amount)
+            _update_km(transaction_id, user_id, delta_km)
+

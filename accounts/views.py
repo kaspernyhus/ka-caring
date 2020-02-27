@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from db_functions.db_data import get_saldo, get_user_km, get_all_data, get_db_entry, update_user_saldo, get_usernames, get_userID, delete_transaction, recalc_ture
+from db_functions.db_data import get_saldo, get_user_km, get_all_data, get_db_entry, update_user_saldo, get_usernames, get_userID, delete_transaction
 from django.views.generic import DeleteView
 from .models import TransactionId
 
