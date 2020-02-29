@@ -93,7 +93,7 @@ def get_all_data():
 
     ture = Ture.objects.all().order_by('-id')
     for tur in ture:
-        all_data.append({'date': tur.date, 'km_count': tur.km_count, 'users': get_usernames(tur.user_id), 'type': 'Kørsel', 'km': tur.delta_km, 'amount': tur.price, 'table_id': tur.id, 'transaction_id': tur.transaction_id})
+        all_data.append({'date': tur.date, 'km_count': tur.km_count, 'users': get_usernames(tur.user_id), 'extra_pas': extra_pas({'extra_pas': tur.extra_pas}), 'type': 'Kørsel', 'km': tur.delta_km, 'amount': tur.price, 'table_id': tur.id, 'transaction_id': tur.transaction_id})
     
     tankninger = Tankning.objects.all().order_by('-id')
     for tankning in tankninger:
@@ -109,6 +109,32 @@ def get_all_data():
     
     all_data_sorted = sorted(all_data, key=lambda k: k['date'], reverse=True)
     return all_data_sorted
+
+
+def get_user_data(user_id):
+    user_data = []
+
+    if user_id == 0:
+        db_data = Kirsten.objects.all().order_by('-id')
+        for entry in db_data:
+            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount })
+        
+    if user_id == 1:
+        db_data = Marie.objects.all().order_by('-id')
+        for entry in db_data:
+            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount })
+        
+    if user_id == 2:
+        db_data = Kasper.objects.all().order_by('-id')
+        for entry in db_data:
+            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount })
+
+    if user_id == 3:
+        db_data = FarMor.objects.all().order_by('-id')
+        for entry in db_data:
+            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount })
+
+    return user_data
 
 
 def update_user_account(transaction_id, user_id, amount, km, category):
@@ -150,6 +176,30 @@ def update_user_account(transaction_id, user_id, amount, km, category):
         print('----------- error: user ID --------------')
 
 
+def extra_pas(data):
+
+    extra_pas = eval(data['extra_pas'])
+
+    if extra_pas == 1:
+        return [0, 1]
+    if extra_pas == 2:
+        return [1, 1]
+    if extra_pas == 3:
+        return [2, 1]
+    if extra_pas == 4:
+        return [3, 1]
+    if extra_pas == 5:
+        return [0, 2]
+    if extra_pas == 6:
+        return [1, 2]
+    if extra_pas == 7:
+        return [2, 2]
+    if extra_pas == 8:
+        return [3, 2]
+    else:
+        return [0, 0]
+
+
 def update_accounts(request, form_data, category, km=0):
     new_id = _create_transaction(request, category)
     
@@ -164,7 +214,9 @@ def update_accounts(request, form_data, category, km=0):
     
     else:
         number_of_users = len(user_ids)
-        
+        if category == 'Tur':
+            number_of_users + extra_pas(form_data)[1]
+
         for user in user_ids:
             user = int(user)
             user_amount = form_data['amount'] / number_of_users
@@ -173,7 +225,12 @@ def update_accounts(request, form_data, category, km=0):
                 update_user_account(new_id, user, user_amount, km, category)
             else:
                 update_user_account(new_id, user, -user_amount, km, category)
-  
+
+        if category == 'Tur' and extra_pas(form_data)[1]:
+            user = extra_pas(form_data)[0]
+            user_amount = user_amount + user_amount * extra_pas(form_data)[1]
+            _update_saldo(new_id, extra_pas(form_data)[0], user_amount)
+
     return new_id
 
 
@@ -324,6 +381,7 @@ def _recalc_user_saldo(user_id):
             entry.save()
     else:
         pass
+
 
 def update_user_km(transaction_id, user_id, delta_km, price):
     user_ids = eval(user_id)

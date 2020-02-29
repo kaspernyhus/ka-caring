@@ -52,12 +52,12 @@
                         {{entry.type}}
                     </td>
                     <td>
-                        {% for user in entry.users %} {{user}} {% endfor %}
+                        {% for user in entry.users %} {{user}} {% endfor %} {% if entry.extra_pas.1 > 0 %} + {{entry.extra_pas.1}} {% endif %}
                     </td>
                     <td>
                         {% if entry.km %} {{entry.km}} km {% endif %}
                     </td>
-                    <td>
+                    <td
                         {% if entry.amount %} {{entry.amount|floatformat:2}} kr. {% endif %}
                     </td>
                     <td>

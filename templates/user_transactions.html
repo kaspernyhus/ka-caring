@@ -26,19 +26,13 @@
                     Type
                 </th>
                 <th>
-                    Bruger(e)
+                    Pris
                 </th>
                 <th>
-                    Antal km
+                    Km kørt
                 </th>
                 <th>
-                    Beløb
-                </th>
-                <th>
-                    Beskrivelse
-                </th>
-                <th>
-                    Rediger
+                    Saldo
                 </th>
             </tr>
         </thead>
@@ -46,73 +40,23 @@
             {% for entry in entries %}
                 <tr>
                     <td>
-                        {{entry.date}}
+                        {{entry.date|date:"d M Y"}} {{entry.date|time:"H:i:s"}}
                     </td>
                     <td>
-                        {{entry.type}}
+                        {{entry.category}}
                     </td>
                     <td>
-                        {% for user in entry.users %} {{user}} {% endfor %}
+                        {{entry.amount|floatformat:2}} kr.
                     </td>
                     <td>
-                        {% if entry.km %} {{entry.km}} km {% endif %}
+                        {{entry.km}} km
                     </td>
                     <td>
-                        {% if entry.amount %} {{entry.amount|floatformat:2}} kr. {% endif %}
-                    </td>
-                    <td>
-                        {{entry.description}}
-                    </td>
-                    <td>
-                        {% if entry.type == 'Tankning' %}
-                        <a href="/tankning/update/{{ entry.table_id }}">X</a>
-                        {% elif entry.type == 'Betaling' %}
-                        <a href="/betaling/update/{{ entry.table_id }}">X</a>
-                        {% elif entry.type == 'Udgift' %}
-                        <a href="/udgift/update/{{ entry.table_id }}">X</a>
-                        {% endif %}
+                        {{entry.saldo|floatformat:2}} kr.
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table >
-
-    <table style="table-layout: fixed;">
-        <colgroup>
-            <col  style="width: 8%;">
-            <col  style="width: 5%;">
-            <col  style="width: 15%;">
-            <col  style="width: 5%;">
-            <col  style="width: 8%;">
-            <col  style="width: 15%;">
-            <col  style="width: 5%;">
-        </colgroup>
-        
-        <tr>
-            <td>
-                
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                <b>{{user_km}} km</b>
-            </td>
-            <td>
-                <b>{{user_saldo|floatformat:2}} kr</b>
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                
-            </td>
-        </tr>
-    
-    </table>
-
 </div>
 {% endblock %}

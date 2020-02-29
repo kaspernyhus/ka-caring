@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import TurForm
 from kacaring.km_price import KM_PRICE
-from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts, update_user_saldo, update_user_km
+from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts, update_user_saldo, update_user_km, extra_pas
 
 from django.views.generic.edit import UpdateView
 from .models import Ture
@@ -38,7 +38,9 @@ class CreateTur(TemplateView):
                 form_obj.transaction_id = new_id                
                 form_obj.save()
                 
-                return render(request, 'tur_confirm.html', {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(data['user_id'])})
+                context = {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(data['user_id']), 'extra_pas': extra_pas(data)[1]}
+
+                return render(request, 'tur_confirm.html', context)
             
             else:
                 return render(request, 'form_error.html', {'error': 'Nuværende kilometertælleraflæsning skal være højere end den seneste!'})
