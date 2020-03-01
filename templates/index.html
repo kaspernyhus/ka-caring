@@ -7,13 +7,19 @@
 
 {% block content %}
 
+
 {% include 'topbar.html' %}
 <h1 class="header">Ford KA-Kørsel</h1>
+
+{% if user.is_authenticated %}
+
 
 {% language 'de' %}
 <p class="header">Km-tæller:</p>
 <p class="header"><b>{{current_km|intcomma}} km</b></p>
 {% endlanguage %}
+
+
 
 <div class="center">
     <a href="{% url 'create_tur' %}" class="button">
@@ -51,6 +57,16 @@
         
         <span>Bookinger</span>    
     </a> -->
+
+    {% if request.user.username == 'kacaring' %} <a href="{% url 'send_emails' %}" class="button">Send emails</a> {% endif %}
 </div>
 
-{% endblock %}
+{% else %}
+<div class="center">
+    <a href="{% url 'login' %}" class="button">Login</a>
+</div>
+
+{% endif %}
+
+
+{% endblock %}s

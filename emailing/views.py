@@ -43,20 +43,20 @@ def mail_to_users(request):
         
         if user == 0:
             recepient = 'kanyhus@gmail.com'
-            message = 'Hej Kirsten,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh Ford Ka Kørsel aps'
+            message = 'Hej Kirsten,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh \nFord Ka Kørsel aps'
         elif user == 1:
             recepient = 'kanyhus@gmail.com'
-            message = 'Hej Marie,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh Ford Ka Kørsel aps'
+            message = 'Hej Marie,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh \nFord Ka Kørsel aps'
         elif user == 2:
             recepient = 'kanyhus@gmail.com'
-            message = 'Hej Kasper,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh Ford Ka Kørsel aps'
+            message = 'Hej Kasper,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh \nFord Ka Kørsel aps'
         elif user == 3:
             recepient = 'kanyhus@gmail.com'
-            message = 'Hej FarMor,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh Ford Ka Kørsel aps'
+            message = 'Hej FarMor,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh \nFord Ka Kørsel aps'
         else:
             recepient = 'kanyhus@gmail.com'
             message = 'for meget'
 
         send_mail(subject, message, EMAIL_HOST_USER, [recepient], fail_silently = False)
     
-    return render(request, 'mail_send.html', {'recepient': recepient})
+    return render(request, 'mail_send.html')
