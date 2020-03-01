@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="header">Email send!</h1>
+<p class="header">til {{recepient}}</p>
+<div class="center">
+    <a href="{% url 'index' %}" class="button">Hjem</a>
+</div>
+{% endblock %}
