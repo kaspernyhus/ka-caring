@@ -8,23 +8,51 @@ from db_functions.db_data import get_saldo
 
 def mail_to_users(request):
     now = datetime.now()
+    month = now.strftime("%B")
+    year = now.strftime("%Y")
+
+    if month == 'January':
+        month = 'Januar'
+    if month == 'February':
+        month = 'Februar'
+    if month == 'March':
+        month = 'Marts'
+    if month == 'April':
+        month = 'April'
+    if month == 'May':
+        month = 'Maj'
+    if month == 'June':
+        month = 'Juni'
+    if month == 'July':
+        month = 'Juli'
+    if month == 'August':
+        month = 'August'
+    if month == 'September':
+        month = 'September'
+    if month == 'October':
+        month = 'Oktober'
+    if month == 'November':
+        month = 'November'
+    if month == 'December':
+        month = 'December'
+
 
     for user in range(4):
         amount = get_saldo(user)
-        subject = 'Ford Ka Kørsel' + now.strftime("%m")
+        subject = 'Ford Ka Kørsel - ' + month + ' ' + year
         
         if user == 0:
             recepient = 'kanyhus@gmail.com'
-            message = 'Hej Kirsten, du skylder Ford-fælles-kassen: ' + str(amount) + ' kr. Venligst mobilepay til: 12 34 56 78'
+            message = 'Hej Kirsten,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh Ford Ka Kørsel aps'
         elif user == 1:
             recepient = 'kanyhus@gmail.com'
-            message = 'Hej Marie, du skylder Ford-fælles-kassen: ' + str(amount) + ' kr. Venligst mobilepay til: 12 34 56 78'
+            message = 'Hej Marie,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh Ford Ka Kørsel aps'
         elif user == 2:
             recepient = 'kanyhus@gmail.com'
-            message = 'Hej Kasper, du skylder Ford-fælles-kassen: ' + str(amount) + ' kr. Venligst mobilepay til: 12 34 56 78'
+            message = 'Hej Kasper,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh Ford Ka Kørsel aps'
         elif user == 3:
             recepient = 'kanyhus@gmail.com'
-            message = 'Hej FarMor, du skylder Ford-fælles-kassen: ' + str(amount) + ' kr. Venligst mobilepay til: 12 34 56 78'
+            message = 'Hej FarMor,\n \ndu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n Mobilepay til: 12 34 56 78. \n \n Mvh Ford Ka Kørsel aps'
         else:
             recepient = 'kanyhus@gmail.com'
             message = 'for meget'
