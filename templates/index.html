@@ -13,12 +13,10 @@
 
 {% if user.is_authenticated %}
 
-
 {% language 'de' %}
 <p class="header">Km-tæller:</p>
 <p class="header"><b>{{current_km|intcomma}} km</b></p>
 {% endlanguage %}
-
 
 
 <div class="center">
@@ -34,17 +32,17 @@
         </svg>
         <span>Tankning</span>
     </a>
-    <a href="{% url 'create_betaling' %}" class="button">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 4H4C2.89 4 2.01 4.89 2.01 6L2 18C2 19.11 2.89 20 4 20H20C21.11 20 22 19.11 22 18V6C22 4.89 21.11 4 20 4ZM20 18H4V12H20V18ZM20 8H4V6H20V8Z" fill="#19351F"/>
-        </svg>
-        <span>Betaling</span>            
-    </a>
     <a href="{% url 'create_udgift' %}" class="button">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11.8 10.9C9.53 10.31 8.8 9.7 8.8 8.75C8.8 7.66 9.81 6.9 11.5 6.9C13.28 6.9 13.94 7.75 14 9H16.21C16.14 7.28 15.09 5.7 13 5.19V3H10V5.16C8.06 5.58 6.5 6.84 6.5 8.77C6.5 11.08 8.41 12.23 11.2 12.9C13.7 13.5 14.2 14.38 14.2 15.31C14.2 16 13.71 17.1 11.5 17.1C9.44 17.1 8.63 16.18 8.52 15H6.32C6.44 17.19 8.08 18.42 10 18.83V21H13V18.85C14.95 18.48 16.5 17.35 16.5 15.3C16.5 12.46 14.07 11.49 11.8 10.9Z" fill="#19351F"/>
         </svg>
         <span>Udgift</span>
+    </a>
+    <a href="{% url 'create_betaling' %}" class="button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4H4C2.89 4 2.01 4.89 2.01 6L2 18C2 19.11 2.89 20 4 20H20C21.11 20 22 19.11 22 18V6C22 4.89 21.11 4 20 4ZM20 18H4V12H20V18ZM20 8H4V6H20V8Z" fill="#19351F"/>
+        </svg>
+        <span>Indbetaling</span>            
     </a>
     <a href="{% url 'oversigt' %}" class="button">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -65,8 +63,6 @@
 <div class="center">
     <a href="{% url 'login' %}" class="button">Login</a>
 </div>
-
 {% endif %}
-
 
 {% endblock %}s
