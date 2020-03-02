@@ -12,35 +12,38 @@ class TransactionId(models.Model):
 
 class Kirsten(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
-    saldo = models.FloatField()
+    saldo = models.FloatField(default=0.0)
     amount = models.FloatField(default=0.0)
-    km = models.IntegerField()
+    km = models.IntegerField(default=0)
     category = models.CharField(blank=True, max_length=50)
     transaction = models.ForeignKey(TransactionId, on_delete=models.CASCADE)
 
 
 class Marie(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
-    saldo = models.FloatField()
+    saldo = models.FloatField(default=0.0)
     amount = models.FloatField(default=0.0)
-    km = models.IntegerField()
+    km = models.IntegerField(default=0)
     category = models.CharField(blank=True, max_length=50)
     transaction = models.ForeignKey(TransactionId, on_delete=models.CASCADE)
 
 
 class Kasper(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
-    saldo = models.FloatField()
+    saldo = models.FloatField(default=0.0)
     amount = models.FloatField(default=0.0)
-    km = models.IntegerField()
+    km = models.IntegerField(default=0)
     category = models.CharField(blank=True, max_length=50)
     transaction = models.ForeignKey(TransactionId, on_delete=models.CASCADE)
 
 
 class FarMor(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
-    saldo = models.FloatField()
+    saldo = models.FloatField(default=0.0)
     amount = models.FloatField(default=0.0)
-    km = models.IntegerField()
+    km = models.IntegerField(default=0)
     category = models.CharField(blank=True, max_length=50)
     transaction = models.ForeignKey(TransactionId, on_delete=models.CASCADE)
+
+class KmPrice(models.Model):
+    price = models.FloatField(default=2.0)

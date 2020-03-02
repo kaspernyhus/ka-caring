@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import TurForm
-from kacaring.km_price import KM_PRICE
+from kacaring.km_price import get_km_price
 from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts, update_user_saldo, update_user_km, extra_pas
 
 from django.views.generic.edit import UpdateView
@@ -27,7 +27,7 @@ class CreateTur(TemplateView):
                 form_obj = form.save(commit=False)
 
                 km = data['km_count'] - previous_km_count
-                tur_pris = km * KM_PRICE
+                tur_pris = km * get_km_price()
 
                 form_obj.delta_km = km
                 form_obj.price = tur_pris
@@ -55,16 +55,29 @@ class TurUpdate(UpdateView):
     fields = ['date', 'km_count', 'user_id', 'extra_pas']
     template_name = 'edit_entries.html'
     success_url = '/'
-
+    
     def form_valid(self, form):
-        instance = form.save(commit=False)
+        form_obj = form.save(commit=False)
         
         # recalc other tur data
-        data = Ture.objects.get(id=instance.id)
-        new_delta_km = data.delta_km + instance.km_count - data.km_count
-        instance.delta_km = new_delta_km
-        instance.price = new_delta_km * KM_PRICE
+        data = Ture.objects.get(id=form_obj.id)
+        new_delta_km = data.delta_km + form_obj.km_count - data.km_count
+        form_obj.delta_km = new_delta_km
+        tur_pris = new_delta_km * get_km_price()
+        form_obj.price = tur_pris
 
-        update_user_km(instance.transaction_id, instance.user_id, instance.delta_km, instance.price)
-        
+        form_obj.user = self.request.user
+        print(form_obj.user)
+
+        try:
+            update_user_km(form_obj.transaction_id, form_obj.user_id, form_obj.delta_km, form_obj.price)
+        except:
+            data = form.cleaned_data
+            data.update({'amount': tur_pris})
+
+            new_id = update_accounts(self.request, data, 'Tur', km=new_delta_km)
+            
+            form_obj.transaction_id = new_id                
+            form_obj.save()
+
         return super(TurUpdate, self).form_valid(form)
