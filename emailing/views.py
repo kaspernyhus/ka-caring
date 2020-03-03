@@ -43,16 +43,16 @@ def mail_to_users(request):
         
         if user == 0:
             recepient = 'nyhuskirsten@gmail.com'
-            message = 'Hej Kirsten,\n \nDu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n MobilePay her <link> og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
+            message = 'Hej Kirsten,\n \nDu skylder Ford-KA\'ssen: ' + str(amount) + ' kr. \n MobilePay her <link> og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
         elif user == 1:
             recepient = 'marienyhusjanssen@gmail.com'
-            message = 'Hej Marie,\n \nDu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n MobilePay her <link> og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
+            message = 'Hej Marie,\n \nDu skylder Ford-KA\'ssen: ' + str(amount) + ' kr. \n MobilePay her <link> og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
         elif user == 2:
             recepient = 'kanyhus@gmail.com'
-            message = 'Hej Kasper,\n \nDu skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n MobilePay her <link> og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
+            message = 'Hej Kasper,\n \nDu skylder Ford-KA\'ssen: ' + str(amount) + ' kr. \n MobilePay her <link> og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
         elif user == 3:
             recepient = 'janssen.per@gmail.com'
-            message = 'Hej Farmor & Farfar,\n \nI skylder Ford-fælles-kassen: ' + str(amount) + ' kr. \n MobilePay her <link> og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
+            message = 'Hej Farmor & Farfar,\n \nI skylder Ford-KA\'ssen: ' + str(amount) + ' kr. \n MobilePay her <link> og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
         else:
             recepient = 'kanyhus@gmail.com'
             message = 'for meget'
