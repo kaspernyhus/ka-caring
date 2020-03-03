@@ -219,7 +219,7 @@ p {
   border-radius: 4px;
 
   font-size: 120%;
-  padding: 20px;
+  padding-left: 20px;
 }
 
 .text-input {
@@ -235,7 +235,7 @@ p {
   border-radius: 4px;
 
   font-size: 100%;
-  padding: 20px;
+  padding-left: 20px;
 }
 
 
