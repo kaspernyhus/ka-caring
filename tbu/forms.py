@@ -22,14 +22,17 @@ class TankningForm(forms.ModelForm):
             'user_id'
         ]
         widgets = {
-            'date': DateInput(),
+            'date': DateInput(attrs={'class': 'input'}),
         }
-    amount = forms.FloatField(label='Beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
+        labels = {
+            'date': 'Dato',
+        }
+    amount = forms.FloatField(label='Beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
     user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
 
 
 class BetalingForm(forms.ModelForm):
-    amount = forms.FloatField(label='Overført beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
+    amount = forms.FloatField(label='Overført beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
     user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
     
     class Meta:
@@ -40,13 +43,16 @@ class BetalingForm(forms.ModelForm):
             'user_id'
         ]
         widgets = {
-            'date': DateInput(),
+            'date': DateInput(attrs={'class': 'input'}),
+        }
+        labels = {
+            'date': 'Dato',
         }
 
 
 class UdgiftForm(forms.ModelForm):
-    amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'type':'number', 'pattern': "\d*"}))
-    description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'rows':4, 'cols':20}))
+    amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
+    description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'class': 'text-input', 'rows':1, 'cols':30}))
     user_id = forms.CharField(label='', widget=forms.CheckboxSelectMultiple(choices=CHOICES, attrs={'class': 'checkbox'}))
     class Meta:
         model = Udgift
@@ -57,5 +63,8 @@ class UdgiftForm(forms.ModelForm):
             'user_id'
         ]
         widgets = {
-            'date': DateInput(),
+            'date': DateInput(attrs={'class': 'input'}),
+        }
+        labels = {
+            'date': 'Dato',
         }

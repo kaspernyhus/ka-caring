@@ -43,5 +43,5 @@ def delete_entry(request, entry_id):
 class TransactionDelete(DeleteView):
     model = TransactionId
     template_name = 'transactionid_confirm_delete.html'
-    success_url = '/'
+    success_url = '/oversigt/alle_transaktioner'
 

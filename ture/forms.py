@@ -28,7 +28,7 @@ class DateInput(forms.DateInput):
 
 class TurForm(forms.ModelForm):
     current_km = get_current_km()
-    km_count = forms.IntegerField(label='Kilometertæller', initial=current_km, widget=forms.NumberInput(attrs={'pattern': "\d*"}))
+    km_count = forms.IntegerField(label='Kilometertæller', initial=current_km, widget=forms.NumberInput(attrs={'class': 'input', 'pattern': "\d*"}))
     user_id = forms.CharField(label='', widget=forms.CheckboxSelectMultiple(choices=CHOICES, attrs={'class': 'checkbox'}))
     extra_pas = forms.CharField(label='Ekstra passager', widget=forms.Select(choices=EKSTRA))
     class Meta:
@@ -40,7 +40,10 @@ class TurForm(forms.ModelForm):
             'extra_pas'
         ]
         widgets = {
-            'date': DateInput(),
+            'date': DateInput(attrs={'class': 'input'}),
+        }
+        labels = {
+            'date': 'Dato'
         }
     
 

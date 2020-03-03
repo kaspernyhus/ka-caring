@@ -7,8 +7,8 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-    <button type="submit" class="sml-button">Gem</button>
+    <button type="submit" class="button">Gem</button>
     </form>
 </div>
-
+<p class="header" style="font-size: 70%;">Aktuel sats pr. km: {{km_price}} kr.</p>
 {% endblock %}

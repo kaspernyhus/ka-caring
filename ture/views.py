@@ -15,7 +15,7 @@ class CreateTur(TemplateView):
         data = {'km_count': get_current_km()}
         form = TurForm(initial=data)
         form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'km_price': get_km_price()})
     
     def post(self, request):
         form = TurForm(request.POST)
@@ -52,7 +52,8 @@ class CreateTur(TemplateView):
 
 class TurUpdate(UpdateView):
     model = Ture
-    fields = ['date', 'km_count', 'user_id', 'extra_pas']
+    #fields = ['date', 'km_count', 'user_id', 'extra_pas']
+    form_class = TurForm
     template_name = 'edit_entries.html'
     success_url = '/'
     

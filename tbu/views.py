@@ -91,7 +91,8 @@ class CreateUdgift(TemplateView):
 
 class TankningUpdate(UpdateView):
     model = Tankning
-    fields = ['date', 'amount']
+    form_class = TankningForm
+    #fields = ['date', 'amount']
     template_name = 'edit_entries.html'
     success_url = '/'
 
@@ -103,7 +104,8 @@ class TankningUpdate(UpdateView):
 
 class BetalingUpdate(UpdateView):
     model = Betaling
-    fields = ['date', 'amount']
+    form_class = BetalingForm
+    #fields = ['date', 'amount']
     template_name = 'edit_entries.html'
     success_url = '/'
 
@@ -115,7 +117,8 @@ class BetalingUpdate(UpdateView):
 
 class UdgiftUpdate(UpdateView):
     model = Udgift
-    fields = ['date', 'amount', 'description', 'user_id']
+    form_class = UdgiftForm
+    #fields = ['date', 'amount', 'description', 'user_id']
     template_name = 'edit_entries.html'
     success_url = '/'
 
