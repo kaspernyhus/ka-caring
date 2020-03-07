@@ -22,6 +22,7 @@ def oversigt(request):
 
 def show_all_transactions(request):
     all_data = get_all_data()
+    print(all_data)
     context = {'entries': all_data}
     return render(request, 'all_transactions.html', context)
 

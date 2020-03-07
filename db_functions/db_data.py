@@ -101,11 +101,14 @@ def get_all_data():
     
     betalinger = Betaling.objects.all().order_by('-id')
     for betaling in betalinger:
-        all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Betaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
-    
+        if betaling.amount > 0:
+          all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Indbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+        else:
+          all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Udbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+
     udgifter = Udgift.objects.all().order_by('-id')
     for udgift in udgifter:
-        all_data.append({'date': udgift.date, 'amount': udgift.amount, 'description': udgift.description, 'users': get_usernames(udgift.user_id), 'type': 'Udgift', 'table_id': udgift.id, 'transaction_id': udgift.transaction_id})
+        all_data.append({'date': udgift.date, 'amount': udgift.amount, 'description': udgift.description, 'users': [get_usernames(udgift.user_id)], 'type': 'Udgift', 'table_id': udgift.id, 'transaction_id': udgift.transaction_id})
     
     all_data_sorted = sorted(all_data, key=lambda k: k['date'], reverse=True)
     return all_data_sorted
@@ -207,8 +210,15 @@ def update_accounts(request, form_data, category, km=0):
     user_ids = eval(user_list)
     
     if isinstance(user_ids, int):
-        if category == 'Udgift' or category == 'Tur':
+        if category == 'Tur':
             update_user_account(new_id, user_ids, form_data['amount'], km, category)
+        elif category == 'Udgift': # deles altid mellem Kirsten, Marie og Kasper
+            user_amount = form_data['amount'] / 3
+            update_user_account(new_id, 0, user_amount, km, category)
+            update_user_account(new_id, 1, user_amount, km, category)
+            update_user_account(new_id, 2, user_amount, km, category)
+
+            update_user_account(new_id, user_ids, -form_data['amount'], km, category)
         else:
             update_user_account(new_id, user_ids, -form_data['amount'], km, category)
     
@@ -221,7 +231,7 @@ def update_accounts(request, form_data, category, km=0):
             user = int(user)
             user_amount = form_data['amount'] / number_of_users
             
-            if category == 'Udgift' or category == 'Tur':        
+            if category == 'Tur':        
                 update_user_account(new_id, user, user_amount, km, category)
             else:
                 update_user_account(new_id, user, -user_amount, km, category)

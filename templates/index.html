@@ -51,12 +51,22 @@
         <span>Oversigt</span>    
     </a>
     
-    <!-- <a href="#" class="button">
-        
-        <span>Bookinger</span>    
-    </a> -->
 
-    {% if request.user.username == 'kacaring' %} <a href="{% url 'send_emails' %}" class="button">Send emails</a> {% endif %}
+    {% if request.user.username == 'kacaring' %} 
+    <br>
+    <a href="{% url 'create_udbetaling' %}" class="button">
+      <span>Udbetaling</span>            
+  </a>
+    
+    <a href="{% url 'bookings' %}" class="button">
+        <span>Bookinger</span>    
+    </a>
+    
+    <a href="{% url 'send_emails' %}" class="button">
+        Send emails
+    </a> 
+    {% endif %}
+
 </div>
 
 {% else %}

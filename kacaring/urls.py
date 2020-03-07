@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('bookings/', include('bookings.urls')),
     path('email/', include('emailing.urls')),
     path('', include('index.urls')),
     path('', include('tbu.urls')),

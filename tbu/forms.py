@@ -53,7 +53,7 @@ class BetalingForm(forms.ModelForm):
 class UdgiftForm(forms.ModelForm):
     amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
     description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'class': 'text-input', 'rows':1, 'cols':30}))
-    user_id = forms.CharField(label='', widget=forms.CheckboxSelectMultiple(choices=CHOICES, attrs={'class': 'checkbox'}))
+    user_id = forms.CharField(label='Hvem har betalt?', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
     class Meta:
         model = Udgift
         fields = [
@@ -67,4 +67,5 @@ class UdgiftForm(forms.ModelForm):
         }
         labels = {
             'date': 'Dato',
+            'user_id': 'Hvem har betalt?'
         }

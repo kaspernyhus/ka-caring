@@ -47,9 +47,9 @@ class CreateBetaling(TemplateView):
         form = BetalingForm(request.POST)
         
         if form.is_valid():
-            print('----------- betaling registreret --------------')
+            print('----------- indbetaling registreret --------------')
             data = form.cleaned_data
-            new_id = update_accounts(request, data, 'Betaling')
+            new_id = update_accounts(request, data, 'Indbetaling')
             
             save_with_id = form.save(commit=False)
             save_with_id.transaction_id = new_id
@@ -128,3 +128,30 @@ class UdgiftUpdate(UpdateView):
         return super(UdgiftUpdate, self).form_valid(form)
 
 
+class CreateUdbetaling(TemplateView):
+    template_name = 'udbetaling.html'
+
+    def get(self, request):
+        form = BetalingForm()
+        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request):
+        form = BetalingForm(request.POST)
+        
+        if form.is_valid():
+            print('----------- Udbetaling registreret --------------')
+            data = form.cleaned_data
+            data['amount'] = -data['amount']
+            new_id = update_accounts(request, data, 'Udbetaling')
+            
+            save_with_id = form.save(commit=False)
+            save_with_id.transaction_id = new_id
+            save_with_id.amount = data['amount']
+            save_with_id.save()
+            
+            return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
+        else:
+            print('------------------------ form not valid ------------------------')
+            print(form.errors)
+            return render(request, 'form_error.html', {'error': 'Husk at vælge en brugere'})
