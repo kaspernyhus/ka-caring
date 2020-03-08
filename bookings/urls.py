@@ -1,8 +1,8 @@
-# from django.urls import path
+from django.urls import path
 
-# from . import views
+from . import views
 
-# urlpatterns = [
-#     path('', views.bookings, name='bookings'),
-#     path('setup', views.setupAPI, name='setupAPI'),
-# ]
+urlpatterns = [
+    #path('', views.bookings, name='bookings'),
+    #path('setup', views.setupAPI, name='setupAPI'),
+]
