@@ -102,9 +102,9 @@ def get_all_data():
     betalinger = Betaling.objects.all().order_by('-id')
     for betaling in betalinger:
         if betaling.amount > 0:
-          all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Indbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+          all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Indbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
         else:
-          all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Udbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+          all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Udbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
 
     udgifter = Udgift.objects.all().order_by('-id')
     for udgift in udgifter:
@@ -120,23 +120,39 @@ def get_user_data(user_id):
     if user_id == 0:
         db_data = Kirsten.objects.all().order_by('-id')
         for entry in db_data:
-            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount })
+            description = ''
+            if entry.category == 'Udgift':
+              udgift_data = get_db_entry(entry.transaction_id)
+              description = udgift_data.description
+            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount, 'description': description, 'transaction_id': entry.transaction_id })
         
     if user_id == 1:
         db_data = Marie.objects.all().order_by('-id')
         for entry in db_data:
-            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount })
+            description = ''
+            if entry.category == 'Udgift':
+              udgift_data = get_db_entry(entry.transaction_id)
+              description = udgift_data.description
+            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount, 'description': description, 'transaction_id': entry.transaction_id })
         
     if user_id == 2:
         db_data = Kasper.objects.all().order_by('-id')
         for entry in db_data:
-            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount })
-
+            description = ''
+            if entry.category == 'Udgift':
+              udgift_data = get_db_entry(entry.transaction_id)
+              description = udgift_data.description
+            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount, 'description': description, 'transaction_id': entry.transaction_id })
+        
     if user_id == 3:
         db_data = FarMor.objects.all().order_by('-id')
         for entry in db_data:
-            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount })
-
+            description = ''
+            if entry.category == 'Udgift':
+              udgift_data = get_db_entry(entry.transaction_id)
+              description = udgift_data.description
+            user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount, 'description': description, 'transaction_id': entry.transaction_id })
+        
     return user_data
 
 
