@@ -147,3 +147,6 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ford.ka.korsel@gmail.com'
 EMAIL_HOST_PASSWORD = 'enkakanoget'
+
+
+GOOGLE_OAUTH2_CLIENT_SECRETS_JSON = 'client_secret.json'
