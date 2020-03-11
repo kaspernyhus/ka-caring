@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from db_functions.db_data import get_saldo, get_user_km, get_all_data, get_user_data, get_db_entry, update_user_saldo, get_usernames, get_userID, delete_transaction
+from db_functions.db_data import get_saldo, get_user_km, get_all_data, get_user_data, get_db_entry, update_user_saldo, get_usernames, get_userID, get_bank_saldo
 from django.views.generic import DeleteView
 from .models import TransactionId
 from kacaring.km_price import get_km_price
@@ -15,7 +15,8 @@ def oversigt(request):
         'marie_km': get_user_km(1),
         'kasper_km': get_user_km(2),
         'farmor_km': get_user_km(3),
-        'km_price': get_km_price()
+        'km_price': get_km_price(),
+        'bank_saldo': get_bank_saldo()
         }
     return render(request, 'oversigt.html', context)
 
@@ -34,11 +35,6 @@ def show_user_transactions(request, userIDname):
     
     context = {'user': userIDname, 'entries': user_data}
     return render(request, 'user_transactions.html', context)
-
-
-def delete_entry(request, entry_id):
-    delete_transaction(request, entry_id)
-    return render(request, 'index.html')
 
 
 class TransactionDelete(DeleteView):

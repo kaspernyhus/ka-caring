@@ -2,7 +2,7 @@ from accounts.models import TransactionId
 from ture.models import Ture
 from tbu.models import Tankning, Betaling, Udgift
 from datetime import datetime
-from accounts.models import Kirsten, Marie, Kasper, FarMor
+from accounts.models import Kirsten, Marie, Kasper, FarMor, OnBankAccount
 #from kacaring import km_price
 
 
@@ -59,6 +59,17 @@ def _get_latest_entry(user_id):
 
 def get_saldo(user_id):
     return _get_latest_entry(user_id).saldo
+
+
+def get_bank_saldo():
+    db_data = OnBankAccount.objects.latest('id')
+    return db_data.saldo
+
+
+def update_bank_account(transaction_id, amount, category, description):
+    new_saldo = amount + get_bank_saldo()
+    new_entry = OnBankAccount(saldo=new_saldo, category=category, description=description, timestamp=datetime.now(), transaction_id=transaction_id)
+    new_entry.save()
 
 
 def get_user_km(user_id):

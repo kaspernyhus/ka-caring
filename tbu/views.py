@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm
-from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts, update_user_saldo
+from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts, update_user_saldo, update_bank_account
 
 from django.views.generic.edit import UpdateView
 from .models import Tankning, Betaling, Udgift
@@ -54,6 +54,8 @@ class CreateBetaling(TemplateView):
             save_with_id = form.save(commit=False)
             save_with_id.transaction_id = new_id
             save_with_id.save()
+
+            update_bank_account(new_id, data['amount'], 'Indbetaling', '')
             
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
@@ -149,6 +151,8 @@ class CreateUdbetaling(TemplateView):
             save_with_id.transaction_id = new_id
             save_with_id.amount = data['amount']
             save_with_id.save()
+
+            update_bank_account(new_id, data['amount'], 'Udbetaling', '')
             
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
