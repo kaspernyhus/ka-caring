@@ -69,3 +69,32 @@ class UdgiftForm(forms.ModelForm):
             'date': 'Dato',
             'user_id': 'Hvem har betalt?'
         }
+
+
+AdminCHOICES=[(0,'Kirsten'),
+         (1,'Marie'),
+         (2,'Kasper'),
+         (3,'Farmor & Farfar'),
+         (4,'Bank konto')
+        ]
+
+
+class AdminUdgiftForm(forms.ModelForm):
+    amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
+    description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'class': 'text-input', 'rows':1, 'cols':30}))
+    user_id = forms.CharField(label='Hvem har betalt?', widget=forms.RadioSelect(choices=AdminCHOICES, attrs={'class': 'checkbox'}))
+    class Meta:
+        model = Udgift
+        fields = [
+            'date', 
+            'amount',
+            'description',
+            'user_id'
+        ]
+        widgets = {
+            'date': DateInput(attrs={'class': 'input'}),
+        }
+        labels = {
+            'date': 'Dato',
+            'user_id': 'Hvem har betalt?'
+        }

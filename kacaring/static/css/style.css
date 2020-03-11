@@ -246,15 +246,14 @@ form {
 
 ul {
   list-style-type: none;
-  margin: 0;
+  margin: 8px;
   padding: 0;
-  overflow: hidden;
-  /* right: 0; */
+  overflow: hidden; 
 }
 
-li {
+/* li {
   float: left;
-}
+} */
 
 li a, .dropbtn {
   display: inline-block;

@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
-from .forms import TankningForm, BetalingForm, UdgiftForm
+from .forms import TankningForm, BetalingForm, UdgiftForm, AdminUdgiftForm
 from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts, update_user_saldo, update_bank_account
 
 from django.views.generic.edit import UpdateView
@@ -55,7 +55,7 @@ class CreateBetaling(TemplateView):
             save_with_id.transaction_id = new_id
             save_with_id.save()
 
-            update_bank_account(new_id, data['amount'], 'Indbetaling', '')
+            update_bank_account(new_id, data['amount'], data['user_id'], 'Indbetaling')
             
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
@@ -89,6 +89,34 @@ class CreateUdgift(TemplateView):
             print('------------------------ form not valid ------------------------')
             print(form.errors)
             return render(request, 'form_error.html', {'error': 'Husk at vælge en brugere'})
+
+
+class CreateAdminUdgift(TemplateView):
+    template_name = 'udgift.html'
+
+    def get(self, request):
+        form = AdminUdgiftForm()
+        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request):
+        form = UdgiftForm(request.POST)
+        
+        if form.is_valid():
+            print('----------- udgift registreret --------------')
+            data = form.cleaned_data
+            new_id = update_accounts(request, data, 'Udgift')
+            
+            save_with_id = form.save(commit=False)
+            save_with_id.transaction_id = new_id
+            save_with_id.save()
+            
+            return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
+        else:
+            print('------------------------ form not valid ------------------------')
+            print(form.errors)
+            return render(request, 'form_error.html', {'error': 'Husk at vælge en brugere'})
+
 
 
 class TankningUpdate(UpdateView):
@@ -152,7 +180,7 @@ class CreateUdbetaling(TemplateView):
             save_with_id.amount = data['amount']
             save_with_id.save()
 
-            update_bank_account(new_id, data['amount'], 'Udbetaling', '')
+            update_bank_account(new_id, data['amount'], data['user_id'], 'Udbetaling')
             
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:

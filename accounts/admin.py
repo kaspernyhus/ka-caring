@@ -9,7 +9,7 @@ class KmAdmin(admin.ModelAdmin):
     list_display = ('price',)
 
 class BankAdmin(admin.ModelAdmin):
-    list_display = ('timestamp', 'saldo', 'category', 'description')
+    list_display = ('timestamp', 'saldo', 'user', 'category')
 
 
 admin.site.register(Kasper, UserAdmin)
