@@ -53,7 +53,7 @@ class OnBankAccount(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
     saldo = models.FloatField(default=0.0)
     category = models.CharField(blank=True, max_length=50, default='')
-    description = models.CharField(max_length=200, default='')
+    description = models.CharField(blank=True, max_length=200, default='')
     transaction = models.ForeignKey(TransactionId, on_delete=models.CASCADE, default=1)
 
   

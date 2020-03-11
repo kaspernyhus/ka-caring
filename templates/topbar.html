@@ -29,6 +29,9 @@
         <a href="{% url 'show_user_transactions' 'user.username' %}">{{user.username}}</a>
         <a href="https://www.kk.dk/sites/default/files/licenskort_indre_by_ib_21.10.2019.pdf">Parkering</a>
         <a href="#">Statistik</a>
+        {% if request.user.username == 'kacaring' %}
+        <a href="/admin">Admin</a>
+        {% endif %}
         <a href="{% url 'logout' %}">Logud</a>
       </div>
     </li>
