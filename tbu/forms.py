@@ -78,18 +78,24 @@ AdminCHOICES=[(0,'Kirsten'),
          (4,'Bank konto')
         ]
 
+SPLIT=[(0,'Ja'),
+        (1,'Nej')
+        ]
 
 class AdminUdgiftForm(forms.ModelForm):
     amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
     description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'class': 'text-input', 'rows':1, 'cols':30}))
     user_id = forms.CharField(label='Hvem har betalt?', widget=forms.RadioSelect(choices=AdminCHOICES, attrs={'class': 'checkbox'}))
+    split = forms.CharField(label='Split mellem brugere?', widget=forms.Select(choices=SPLIT))
+    
     class Meta:
         model = Udgift
         fields = [
             'date', 
             'amount',
             'description',
-            'user_id'
+            'user_id',
+            'split'
         ]
         widgets = {
             'date': DateInput(attrs={'class': 'input'}),

@@ -100,11 +100,12 @@ class CreateAdminUdgift(TemplateView):
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
-        form = UdgiftForm(request.POST)
+        form = AdminUdgiftForm(request.POST)
         
         if form.is_valid():
             print('----------- udgift registreret --------------')
             data = form.cleaned_data
+            print(data)
             new_id = update_accounts(request, data, 'Udgift')
             
             save_with_id = form.save(commit=False)

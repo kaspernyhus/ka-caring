@@ -54,6 +54,7 @@ class OnBankAccount(models.Model):
     saldo = models.FloatField(default=0.0)
     category = models.CharField(blank=True, max_length=50, default='')
     user = models.CharField(max_length=20, default='AnonymousUser')
+    description = models.CharField(blank=True, default='', max_length=200)
     transaction = models.ForeignKey(TransactionId, on_delete=models.CASCADE, default=1)
 
   

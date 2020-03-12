@@ -66,9 +66,9 @@ def get_bank_saldo():
     return db_data.saldo
 
 
-def update_bank_account(transaction_id, amount, user_id, category):
+def update_bank_account(transaction_id, amount, user_id, category, description=''):
     new_saldo = amount + get_bank_saldo()
-    new_entry = OnBankAccount(saldo=new_saldo, category=category, user=user_id, timestamp=datetime.now(), transaction_id=transaction_id)
+    new_entry = OnBankAccount(saldo=new_saldo, category=category, user=user_id, timestamp=datetime.now(), description=description, transaction_id=transaction_id)
     new_entry.save()
 
 
@@ -240,13 +240,17 @@ def update_accounts(request, form_data, category, km=0):
         if category == 'Tur':
             update_user_account(new_id, user_ids, form_data['amount'], km, category)
         elif category == 'Udgift': # deles altid mellem Kirsten, Marie og Kasper 
-            user_amount = form_data['amount'] / 3
-            update_user_account(new_id, 0, user_amount, km, category)
-            update_user_account(new_id, 1, user_amount, km, category)
-            update_user_account(new_id, 2, user_amount, km, category)
+            try:
+              if form_data['split'] == '1':
+                update_bank_account(new_id, -form_data['amount'], form_data['user_id'], 'Udgift')
+            except:    
+              user_amount = form_data['amount'] / 3
+              update_user_account(new_id, 0, user_amount, km, category)
+              update_user_account(new_id, 1, user_amount, km, category)
+              update_user_account(new_id, 2, user_amount, km, category)
 
-            if form_data['user_id'] != 4:
-              update_user_account(new_id, user_ids, -form_data['amount'], km, category)
+              if form_data['user_id'] != 4:
+                update_user_account(new_id, user_ids, -form_data['amount'], km, category)
         else:
             update_user_account(new_id, user_ids, -form_data['amount'], km, category)
     
