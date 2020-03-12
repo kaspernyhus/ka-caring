@@ -10,7 +10,17 @@
       </a>
       
       <div class="dropdown-content">
-        <a href="{% url 'show_user_transactions' 'user.username' %}">{{user.username}}</a>
+        {% if user.username == 'Kirsten' %}
+        <a href="{% url 'show_user_transactions' 'Kirsten' %}   ">{{user.username}}</a>
+        {% elif user.username == 'Marie' %}
+        <a href="{% url 'show_user_transactions' 'Marie' %}   ">{{user.username}}</a>
+        {% elif user.username == 'Kasper' %}
+        <a href="{% url 'show_user_transactions' 'Kasper' %}   ">{{user.username}}</a>
+        {% elif user.username == 'FarMor' %}
+        <a href="{% url 'show_user_transactions' 'FarMor' %}   ">{{user.username}}</a>
+        {% else %}
+        <a href="#">{{user.username}}</a>
+        {% endif %}
         <a href="https://www.kk.dk/sites/default/files/licenskort_indre_by_ib_21.10.2019.pdf">Parkering</a>
         <a href="{% url 'statistik' %}">Statistik</a>
         {% if request.user.username == 'kacaring' %}
