@@ -43,6 +43,13 @@ def get_current_km():
     return db_data.km_count
 
 
+def get_total_tankning():
+    db_data = Tankning.objects.all()
+    for entry in db_data:
+      total =+ entry.amount
+    return total
+
+
 def _get_latest_entry(user_id):
     if user_id == 0:
         db_data = Kirsten.objects.latest('id')
