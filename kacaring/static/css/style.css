@@ -298,3 +298,25 @@ li.dropdown {
 .login {
   margin-bottom: 15px;
 }
+
+.oversigt-table {
+  width: 300px;
+  border: none;
+}
+
+.oversigt-tr {
+  border: none;
+  background: transparent;
+}
+
+.oversigt-td {
+  border: none;
+  text-align: left;
+}
+
+.oversigt-name {
+  vertical-align: top;
+  border: none;
+  margin-block-start: 0em;
+}
+
