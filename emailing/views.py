@@ -13,10 +13,6 @@ class UserPref(TemplateView):
     def get(self, request):
         form = UserPrefForm()
         user_id = get_userID(request.user.username)
-        print('-----------------------------')
-        print(user_id)
-        print(type(user_id))
-        print('-----------------------------')
         form.fields['user_prefs'].initial = get_email_prefs(user_id)
         return render(request, self.template_name, {'form': form})
     
