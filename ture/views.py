@@ -3,6 +3,7 @@ from django.shortcuts import render
 from .forms import TurForm
 from kacaring.km_price import get_km_price
 from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts, update_user_saldo, update_user_km, extra_pas
+from emailing.views import tur_oprettet_mail
 
 from django.views.generic.edit import UpdateView
 from .models import Ture
@@ -38,8 +39,9 @@ class CreateTur(TemplateView):
                 form_obj.transaction_id = new_id                
                 form_obj.save()
                 
-                context = {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(data['user_id']), 'extra_pas': extra_pas(data)[1]}
+                tur_oprettet_mail(request.user.username, data)
 
+                context = {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(data['user_id']), 'extra_pas': extra_pas(data)[1]}
                 return render(request, 'tur_confirm.html', context)
             
             else:

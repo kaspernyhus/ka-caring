@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm, AdminUdgiftForm
 from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts, update_user_saldo, update_bank_account
+from emailing.views import udgift_oprettet_mail, tankning_oprettet_mail, indbetaling_oprettet_mail
 
 from django.views.generic.edit import UpdateView
 from .models import Tankning, Betaling, Udgift
@@ -27,6 +28,8 @@ class CreateTankning(TemplateView):
             save_with_id = form.save(commit=False)
             save_with_id.transaction_id = new_id
             save_with_id.save()
+
+            tankning_oprettet_mail(request.user.username, data)
 
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
@@ -56,6 +59,8 @@ class CreateBetaling(TemplateView):
             save_with_id.save()
 
             update_bank_account(new_id, data['amount'], data['user_id'], 'Indbetaling')
+
+            indbetaling_oprettet_mail(request.user.username, data)
             
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
@@ -76,7 +81,7 @@ class CreateUdgift(TemplateView):
         form = UdgiftForm(request.POST)
         
         if form.is_valid():
-            print('----------- udgift registreret --------------')
+            print('----------- udgift registreret --------------!!')
             data = form.cleaned_data
             new_id = update_accounts(request, data, 'Udgift')
             
@@ -84,6 +89,8 @@ class CreateUdgift(TemplateView):
             save_with_id.transaction_id = new_id
             save_with_id.save()
             
+            udgift_oprettet_mail(request.user.username, data)
+
             return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
@@ -105,7 +112,7 @@ class CreateAdminUdgift(TemplateView):
         if form.is_valid():
             print('----------- udgift registreret --------------')
             data = form.cleaned_data
-            print(data)
+            
             new_id = update_accounts(request, data, 'Udgift')
             
             save_with_id = form.save(commit=False)
