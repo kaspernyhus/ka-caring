@@ -17,7 +17,7 @@ class UserPref(TemplateView):
         print(user_id)
         print(type(user_id))
         print('-----------------------------')
-        form.fields['user_prefs'].initial = get_email_prefs(0)
+        form.fields['user_prefs'].initial = get_email_prefs(user_id)
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
