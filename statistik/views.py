@@ -1,15 +1,37 @@
 from django.shortcuts import render
-from db_functions.db_data import get_total_tankning, get_current_km
+from db_functions.db_data import get_total_tankning, get_current_km, get_user_km
 
-def show_stats(request):
+
+def get_total_km():
   km = get_current_km()
   km = km - 114293 #km ved overtagelse
-  tankning = 1
-  pris_pr_km = km / tankning
+  return km
 
-  context = {'pris_pr_km': pris_pr_km}
 
+def show_stats(request):
+  context = {'pris_pr_km': calc_km_fuel_price(), 'usage': calc_usage() }
   return render(request, 'stats.html', context)
+
+
+def calc_km_fuel_price():
+  km = get_total_km()
+  tankning = get_total_tankning()
+  pris_pr_km = tankning / km
+  return pris_pr_km
+
+
+def calc_usage():
+  total_km = get_total_km()
+
+  usage = []
+
+  for user in range(4):
+    user_km = get_user_km(user)
+    user_usage = (user_km / total_km) * 100
+    usage.append(int(round(user_usage, 0)))
+  return usage
+
 
 def faq(request):
   return render(request, 'faq.html')
+

@@ -3,9 +3,21 @@
 {% block content %}
 <div class="container">
     <h3 class="header">Statistik</h3>
-    <p class="header">OBS: under opbygning</p>
+    
     <h4 class="header">Benzinpris pr. kørt km</h4>
     <p class="header">{{pris_pr_km|floatformat:2}} kr. pr. km</p>
+
+    <h4 class="header">Samlede gennemsnitslige udgift pr. måned</h4>
+    <p class="header">- kr.</p>
+
+    <h4 class="header">Brugsfordeling</h4>
+    <p class="header">Kirsten: {{usage.0}}%</p>
+    <p class="header">Marie: {{usage.1}}%</p>
+    <p class="header">Kasper: {{usage.2}}%</p>
+    <p class="header">Farmor & Farfar: {{usage.3}}%</p>
+
+    <h4 class="header">Samlede udgift i 2020</h4>
+    <p class="header">- kr.</p>
 </div>
 
 

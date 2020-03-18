@@ -83,13 +83,13 @@ def send_monthly_saldo_mail():
 
 def udgift_oprettet_mail(username, data):
   subject = 'Ford Ka Kørsel - Udgift registreret'
-  
+  message = 'd. ' + str(data['date']) + ' har ' + username + ' oprettet en udgift på ' + str(round(data['amount'], 2)) + ' kr. med teksten:\n' + data['description'] + '.\n \n Mvh \nFord Ka Kørsel aps'
+
   for user in range(4):
     email_pref = get_email_prefs(user)
 
     for pref in email_pref:
       if pref == 1:
-        message = 'd. ' + str(data['date']) + ' har ' + username + ' oprettet en udgift på ' + str(round(data['amount'], 2)) + ' kr. med teksten:\n' + data['description'] + '.\n \n Mvh \nFord Ka Kørsel aps'
         email = {'user_id': user, 'subject': subject, 'message': message}
         emailQue_add(email)
   email = {'user_id': 4, 'subject': subject, 'message': message}
@@ -98,28 +98,29 @@ def udgift_oprettet_mail(username, data):
 
 def tankning_oprettet_mail(username, data):
   subject = 'Ford Ka Kørsel - Tankning registreret'
-  
+  message = 'd. ' + str(data['date']) + ' har ' + username + ' registreret en tankning på ' + str(round(data['amount'], 2)) + ' kr.\n \n Mvh \nFord Ka Kørsel aps'
+
   for user in range(4):
     email_pref = get_email_prefs(user)
 
     for pref in email_pref:
       if pref == 2:
-        message = 'd. ' + str(data['date']) + ' har ' + username + ' registreret en tankning på ' + str(round(data['amount'], 2)) + ' kr.\n \n Mvh \nFord Ka Kørsel aps'
         email = {'user_id': user, 'subject': subject, 'message': message}
         emailQue_add(email)
+  
   email = {'user_id': 4, 'subject': subject, 'message': message}
   emailQue_add(email)
 
 
 def tur_oprettet_mail(username, data):
   subject = 'Ford Ka Kørsel - Tur registreret'
-  
+  message = 'd. ' + str(data['date']) + ' har ' + username + ' registreret en tur.\nAktuel km-tæller: ' + str(data['km_count']) + ' km.\n \n Mvh \nFord Ka Kørsel aps'
+
   for user in range(4):
     email_pref = get_email_prefs(user)
 
     for pref in email_pref:
       if pref == 3:
-        message = 'd. ' + str(data['date']) + ' har ' + username + ' registreret en tur.\nAktuel km-tæller: ' + str(data['km_count']) + ' km.\n \n Mvh \nFord Ka Kørsel aps'
         email = {'user_id': user, 'subject': subject, 'message': message}
         emailQue_add(email)
   email = {'user_id': 4, 'subject': subject, 'message': message}
