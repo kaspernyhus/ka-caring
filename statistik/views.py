@@ -9,14 +9,17 @@ def get_total_km():
 
 
 def show_stats(request):
-  context = {'pris_pr_km': calc_km_fuel_price(), 'usage': calc_usage() }
+  context = {'total_km': get_total_km ,'pris_pr_km': calc_km_fuel_price(), 'usage': calc_usage() }
   return render(request, 'stats.html', context)
 
 
 def calc_km_fuel_price():
-  km = get_total_km()
-  tankning = get_total_tankning()
-  pris_pr_km = tankning / km
+  try:
+    km = get_total_km()
+    tankning = get_total_tankning()
+    pris_pr_km = tankning / km
+  except:
+    pris_pr_km = 0.0
   return pris_pr_km
 
 

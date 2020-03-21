@@ -9,6 +9,10 @@ body {
   padding-bottom: 30px;
 }
 
+.W300px {
+  width: 360px;
+}
+
 .header {
     text-align: center;
     margin-block-end: 0.2em;
