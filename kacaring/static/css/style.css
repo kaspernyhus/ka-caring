@@ -193,6 +193,8 @@ p {
   background-color: #96e686;
   /* padding: 0.1rem 0.3rem; */
   float: right;
+  height: 46px;
+  width: 46px;
 }
 
 .navbar-nav {
@@ -263,7 +265,6 @@ li a, .dropbtn {
   display: inline-block;
   color: white;
   text-align: center;
-  padding: 6px 6px;
   text-decoration: none;
 }
 
@@ -273,6 +274,11 @@ li a:hover, .dropdown:hover .dropbtn {
 
 li.dropdown {
   display: inline-block;
+  height: 30px;
+}
+
+ul.dropdown {
+  height: 30px;
 }
 
 .dropdown-content {
