@@ -281,10 +281,6 @@ li.dropdown {
   height: 30px;
 }
 
-ul.dropdown {
-  height: 30px;
-}
-
 .dropdown-content {
   display: none;
   position: absolute;

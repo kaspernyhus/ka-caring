@@ -1,8 +1,10 @@
+from django.conf.urls import url
 from django.urls import path
+from . import views 
 
-from . import views
-
-urlpatterns = [
-    #path('', views.bookings, name='bookings'),
-    #path('setup', views.setupAPI, name='setupAPI'),
-]
+urlpatterns = [ 
+	url(r'^googleAuthenticate', views.google_authenticate, name ='google_authenticate'), 
+	url(r'^oauth2callback', views.auth_return), 
+	url(r'^login', views.login, name ='login'),
+  path('', views.calendar, name='calendar'),
+] 

@@ -15,6 +15,7 @@
       <div class="dropdown-content">
         <a href="{% url 'user_pref' %}">{{user.username}}</a>
         <a href="https://www.kk.dk/sites/default/files/licenskort_indre_by_ib_21.10.2019.pdf">Parkering</a>
+        <a href="{% url 'calendar' %}">Bookinger</a>
         <a href="{% url 'statistik' %}">Statistik</a>
         <a href="{% url 'FAQ' %}">FAQ</a>
         {% if request.user.username == 'kacaring' %}
