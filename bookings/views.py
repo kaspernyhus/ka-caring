@@ -75,7 +75,7 @@ def calendar(request):
 FLOW = flow_from_clientsecrets(
     settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
     scope='https://www.googleapis.com/auth/calendar',
-    redirect_uri='http://localhost:8000/bookings/oauth2callback',
+    redirect_uri='http://kacaring.pythonanywhere.com/bookings/oauth2callback', #localhost:8000
     prompt='consent')
 
 
