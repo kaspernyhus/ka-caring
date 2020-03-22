@@ -18,6 +18,10 @@ body {
     margin-block-end: 0.2em;
 }
 
+.no-margin-top {
+  margin-block-start: 0.2em;
+}
+
 .footer {
     position: fixed;
     left: 0;
