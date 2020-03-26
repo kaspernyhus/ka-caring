@@ -6,6 +6,7 @@ from emailing.views import udgift_oprettet_mail, tankning_oprettet_mail, indbeta
 
 from django.views.generic.edit import UpdateView
 from .models import Tankning, Betaling, Udgift
+from datetime import datetime
 
 
 class CreateTankning(TemplateView):

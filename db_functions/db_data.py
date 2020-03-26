@@ -246,20 +246,9 @@ def update_accounts(request, form_data, category, km=0):
     if isinstance(user_ids, int):
         if category == 'Tur':
             update_user_account(new_id, user_ids, form_data['amount'], km, category)
-        elif category == 'Udgift': # deles altid mellem Kirsten, Marie og Kasper 
-            try:
-              if form_data['split'] == '1':
-                update_bank_account(new_id, -form_data['amount'], form_data['user_id'], 'Udgift')
-            except:    
-              user_amount = form_data['amount'] / 3
-              update_user_account(new_id, 0, user_amount, km, category)
-              update_user_account(new_id, 1, user_amount, km, category)
-              update_user_account(new_id, 2, user_amount, km, category)
-
-              if form_data['user_id'] != 4:
-                update_user_account(new_id, user_ids, -form_data['amount'], km, category)
         else:
             update_user_account(new_id, user_ids, -form_data['amount'], km, category)
+        
     
     else:
         number_of_users = len(user_ids)
