@@ -10,7 +10,7 @@ from .models import Ture
 
 
 class CreateTur(TemplateView):
-    template_name = 'tur.html'
+    template_name = 'transactions/tur.html'
     
     def get(self, request):
         data = {'km_count': get_current_km()}
@@ -42,21 +42,21 @@ class CreateTur(TemplateView):
                 tur_oprettet_mail(request.user.username, data)
 
                 context = {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(data['user_id']), 'extra_pas': extra_pas(data)[1]}
-                return render(request, 'tur_confirm.html', context)
+                return render(request, 'transactions/tur_confirm.html', context)
             
             else:
-                return render(request, 'form_error.html', {'error': 'Nuværende kilometertælleraflæsning skal være højere end den seneste!'})
+                return render(request, 'transactions/form_error.html', {'error': 'Nuværende kilometertælleraflæsning skal være højere end den seneste!'})
             
         else:
             print('------------------------ form not valid ------------------------')
-            return render(request, 'form_error.html', {'error': 'Husk at vælge en eller flere brugere'})
+            return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en eller flere brugere'})
 
 
 class TurUpdate(UpdateView):
     model = Ture
     #fields = ['date', 'km_count', 'user_id', 'extra_pas']
     form_class = TurForm
-    template_name = 'edit_entries.html'
+    template_name = 'transactions/edit_entries.html'
     success_url = '/'
     
     def form_valid(self, form):

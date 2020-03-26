@@ -3,4 +3,4 @@ from db_functions.db_data import get_current_km
 
 def index(request):
     current_km = get_current_km()
-    return render(request, 'index.html', {'current_km': current_km})
+    return render(request, 'users/index.html', {'current_km': current_km})

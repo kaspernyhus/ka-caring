@@ -18,13 +18,13 @@ def oversigt(request):
         'km_price': get_km_price(),
         'bank_saldo': get_bank_saldo()
         }
-    return render(request, 'oversigt.html', context)
+    return render(request, 'oversigter/oversigt.html', context)
 
 
 def show_all_transactions(request):
     all_data = get_all_data()
     context = {'entries': all_data}
-    return render(request, 'all_transactions.html', context)
+    return render(request, 'oversigter/all_transactions.html', context)
 
 
 def show_user_transactions(request, userIDname):
@@ -33,11 +33,11 @@ def show_user_transactions(request, userIDname):
     user_data = get_user_data(userID)
     
     context = {'user': userIDname, 'entries': user_data}
-    return render(request, 'user_transactions.html', context)
+    return render(request, 'oversigter/user_transactions.html', context)
 
 
 class TransactionDelete(DeleteView):
     model = TransactionId
-    template_name = 'transactionid_confirm_delete.html'
+    template_name = 'transactions/transactionid_confirm_delete.html'
     success_url = '/oversigt/alle_transaktioner'
 

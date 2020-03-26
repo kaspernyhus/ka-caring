@@ -17,8 +17,8 @@ def login(request):
             return redirect('login')
 
     else:
-        return render(request, '_login.html')
+        return render(request, 'partials/_login.html')
 
 def logout(request):
     auth.logout(request)
-    return redirect('index')
+    return redirect('users/index')

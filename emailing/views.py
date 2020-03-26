@@ -8,7 +8,7 @@ from db_functions.db_data import get_saldo, get_email_prefs, update_email_prefs,
 
 
 class UserPref(TemplateView):
-    template_name = 'user_pref.html'
+    template_name = 'emailing/user_pref.html'
 
     def get(self, request):
         form = UserPrefForm()
@@ -26,7 +26,7 @@ class UserPref(TemplateView):
         else:
             user_id = get_userID(request.user.username)
             update_email_prefs(user_id, {'user_prefs': "[]"})
-        return redirect('index')
+        return redirect('users/index')
 
 
 def send_mail_to_user(user_id, subject, message):
@@ -35,7 +35,7 @@ def send_mail_to_user(user_id, subject, message):
   elif user_id == 1:
     recepient = 'kanyhus@gmail.com' #marienyhusjanssen@gmail.com
   elif user_id == 2:
-    recepient = 'kanyhus@gmail.com'
+    recepient = 'kanyhus@gmail.com' #nyhuskaae@gmail.com
   elif user_id == 3:
     recepient = 'kanyhus@gmail.com' #janssen.per@gmail.com
   elif user_id == 4:
@@ -170,4 +170,4 @@ def check_email_scheduler(request):
 
   send_all_mails_in_Q()
 
-  return render(request, 'mail_send.html')
+  return render(request, 'emailing/mail_send.html')

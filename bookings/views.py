@@ -83,7 +83,7 @@ def get_calendar_events():
 def show_bookings(request):
   calendar_events = get_calendar_events()
   context = {'events': calendar_events}
-  return render(request, 'show_bookings.html', context=context)
+  return render(request, 'calendar/show_bookings.html', context=context)
 
 
 def check_if_booked(start_date, end_date):
@@ -147,9 +147,9 @@ def create_booking(request):
       
       create_calendar_event(start_date, end_date, username)
       
-      return render(request, 'event_created.html', context={'user': username, 'start_date': start_date.strftime("%d/%m/%Y") , 'end_date': end_date.strftime("%d/%m/%Y"), 'OBS': OBS})
+      return render(request, 'calendar/event_created.html', context={'user': username, 'start_date': start_date.strftime("%d/%m/%Y") , 'end_date': end_date.strftime("%d/%m/%Y"), 'OBS': OBS})
 
-  return render(request, 'create_event.html', context={'form': form})
+  return render(request, 'calendar/create_event.html', context={'form': form})
 
 ################################
 #   GMAIL API IMPLEMENTATION   #

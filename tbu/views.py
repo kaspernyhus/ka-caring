@@ -10,7 +10,7 @@ from datetime import datetime
 
 
 class CreateTankning(TemplateView):
-    template_name = 'tankning.html'
+    template_name = 'transactions/tankning.html'
     
     def get(self, request):
         form = TankningForm()
@@ -32,15 +32,15 @@ class CreateTankning(TemplateView):
 
             tankning_oprettet_mail(request.user.username, data)
 
-            return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
+            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
             print(form.errors)
-            return render(request, 'form_error.html', {'error': 'Husk at vælge en brugere'})
+            return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en brugere'})
         
 
 class CreateBetaling(TemplateView):
-    template_name = 'betaling.html'
+    template_name = 'transactions/betaling.html'
 
     def get(self, request):
         form = BetalingForm()
@@ -63,15 +63,15 @@ class CreateBetaling(TemplateView):
 
             indbetaling_oprettet_mail(request.user.username, data)
             
-            return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
+            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
             print(form.errors)
-            return render(request, 'form_error.html', {'error': 'Husk at vælge en brugere'})
+            return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en brugere'})
 
 
 class CreateUdgift(TemplateView):
-    template_name = 'udgift.html'
+    template_name = 'transactions/udgift.html'
 
     def get(self, request):
         form = UdgiftForm()
@@ -92,15 +92,15 @@ class CreateUdgift(TemplateView):
             
             udgift_oprettet_mail(request.user.username, data)
 
-            return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
+            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
             print(form.errors)
-            return render(request, 'form_error.html', {'error': 'Husk at vælge en brugere'})
+            return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en brugere'})
 
 
 class CreateAdminUdgift(TemplateView):
-    template_name = 'udgift.html'
+    template_name = 'transactions/udgift.html'
 
     def get(self, request):
         form = AdminUdgiftForm()
@@ -120,19 +120,18 @@ class CreateAdminUdgift(TemplateView):
             save_with_id.transaction_id = new_id
             save_with_id.save()
             
-            return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
+            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
             print(form.errors)
-            return render(request, 'form_error.html', {'error': 'Husk at vælge en brugere'})
+            return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en brugere'})
 
 
 
 class TankningUpdate(UpdateView):
     model = Tankning
     form_class = TankningForm
-    #fields = ['date', 'amount']
-    template_name = 'edit_entries.html'
+    template_name = 'transactions/edit_entries.html'
     success_url = '/'
 
     def form_valid(self, form):
@@ -145,7 +144,7 @@ class BetalingUpdate(UpdateView):
     model = Betaling
     form_class = BetalingForm
     #fields = ['date', 'amount']
-    template_name = 'edit_entries.html'
+    template_name = 'transactions/edit_entries.html'
     success_url = '/'
 
     def form_valid(self, form):
@@ -158,7 +157,7 @@ class UdgiftUpdate(UpdateView):
     model = Udgift
     form_class = UdgiftForm
     #fields = ['date', 'amount', 'description', 'user_id']
-    template_name = 'edit_entries.html'
+    template_name = 'transactions/edit_entries.html'
     success_url = '/'
 
     def form_valid(self, form):
@@ -168,7 +167,7 @@ class UdgiftUpdate(UpdateView):
 
 
 class CreateUdbetaling(TemplateView):
-    template_name = 'udbetaling.html'
+    template_name = 'transactions/udbetaling.html'
 
     def get(self, request):
         form = BetalingForm()
@@ -191,8 +190,8 @@ class CreateUdbetaling(TemplateView):
 
             update_bank_account(new_id, data['amount'], data['user_id'], 'Udbetaling')
             
-            return render(request, 'betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
+            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'user': get_usernames(data['user_id'])})
         else:
             print('------------------------ form not valid ------------------------')
             print(form.errors)
-            return render(request, 'form_error.html', {'error': 'Husk at vælge en brugere'})
+            return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en brugere'})

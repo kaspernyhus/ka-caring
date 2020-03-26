@@ -10,7 +10,7 @@ def get_total_km():
 
 def show_stats(request):
   context = {'total_km': get_total_km ,'pris_pr_km': calc_km_fuel_price(), 'usage': calc_usage() }
-  return render(request, 'stats.html', context)
+  return render(request, 'oversigter/stats.html', context)
 
 
 def calc_km_fuel_price():
@@ -36,5 +36,5 @@ def calc_usage():
 
 
 def faq(request):
-  return render(request, 'faq.html')
+  return render(request, 'oversigter/faq.html')
 
