@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="header">Oversigt</h1>
+
+<div class="center">
+  <table class="oversigt-table">
+    <colgroup>
+      <col  style="width: 50%;">
+      <col  style="width: 50%;">
+  </colgroup>
+
+    <tr class="oversigt-tr">
+      <td class="oversigt-name">
+        <h2 class="oversigt-name">
+          <a href="{% url 'show_user_transactions' 'Kirsten' %}" class="header_link">{{username}}</a>
+        </h2>
+      </td>
+      <td class="oversigt-td">
+        <p>{{user_saldo|floatformat:2}} kr.</p>
+        <p>Kørt i alt: {{user_km}} km.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<div class="center">
+  <a href="{% url 'index' %}" class="sml-button">Tilbage</a>
+  </div>
+</div>
+
+{% endblock %}
+

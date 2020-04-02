@@ -2,7 +2,8 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import TurForm
 from kacaring.km_price import get_km_price
-from db_functions.db_data import get_usernames, get_userID, get_current_km, update_user_account, update_accounts, update_user_saldo, update_user_km, extra_pas
+from db_functions.transactions import get_current_km
+from db_functions.users import get_usernames, extra_pas, update_accounts, update_user_km
 from emailing.views import tur_oprettet_mail
 
 from django.views.generic.edit import UpdateView
@@ -15,8 +16,8 @@ class CreateTur(TemplateView):
     def get(self, request):
         data = {'km_count': get_current_km()}
         form = TurForm(initial=data)
-        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
-        return render(request, self.template_name, {'form': form, 'km_price': get_km_price()})
+        form.fields['user_id'].initial = request.user.id # auto check current user logged in
+        return render(request, self.template_name, {'form': form, 'km_price': get_km_price(request.user.groups)})
     
     def post(self, request):
         form = TurForm(request.POST)
@@ -28,7 +29,7 @@ class CreateTur(TemplateView):
                 form_obj = form.save(commit=False)
 
                 km = data['km_count'] - previous_km_count
-                tur_pris = km * get_km_price()
+                tur_pris = km * get_km_price(request.user.groups)
 
                 form_obj.delta_km = km
                 form_obj.price = tur_pris
@@ -66,7 +67,7 @@ class TurUpdate(UpdateView):
         data = Ture.objects.get(id=form_obj.id)
         new_delta_km = data.delta_km + form_obj.km_count - data.km_count
         form_obj.delta_km = new_delta_km
-        tur_pris = new_delta_km * get_km_price()
+        tur_pris = new_delta_km * get_km_price(self.request.user.groups)
         form_obj.price = tur_pris
 
         form_obj.user = self.request.user

@@ -12,7 +12,8 @@ from httplib2 import Http
 from datetime import datetime, timedelta
 from django.views.generic import TemplateView
 from .forms import BookingForm
-from db_functions.db_data import get_userID, get_usernames
+from db_functions.users import get_usernames
+from django.contrib.auth.decorators import login_required
 
 
 def login(request):
@@ -30,6 +31,7 @@ def login(request):
         print('Not Found')
 
     return render(request, 'google_login.html', {'status': status})
+
 
 
 def get_calendar_events():
@@ -80,6 +82,7 @@ def get_calendar_events():
   return events  
 
 
+@login_required(login_url='login')
 def show_bookings(request):
   calendar_events = get_calendar_events()
   context = {'events': calendar_events}
@@ -127,9 +130,10 @@ def create_calendar_event(start_date, end_date, username):
   event = service.events().insert(calendarId='ford.ka.korsel@gmail.com', body=event).execute()
 
 
+@login_required(login_url='login')
 def create_booking(request):
-  form = BookingForm()
-  form.fields['user_id'].initial = get_userID(request.user.username)
+  form = BookingForm(request.user.groups)
+  form.fields['user_id'].initial = request.user.id
 
   if request.method == 'POST':
     form = BookingForm(request.POST)

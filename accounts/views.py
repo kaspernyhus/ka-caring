@@ -1,38 +1,53 @@
 from django.shortcuts import render
-from db_functions.db_data import get_saldo, get_user_km, get_all_data, get_user_data, get_db_entry, update_user_saldo, get_usernames, get_userID, get_bank_saldo
+from django.contrib.auth.decorators import login_required, user_passes_test
+from db_functions.users import get_user_saldo, get_user_km, get_user_data
+from db_functions.transactions import get_all_data, get_bank_saldo
 from django.views.generic import DeleteView
 from .models import TransactionId
 from kacaring.km_price import get_km_price
+from users.views import is_VIP
 
 
+@login_required(login_url='login')
+@user_passes_test(is_VIP, login_url='guest_oversigt')
 def oversigt(request):
     context = {
-        'kirsten_saldo': get_saldo(0), 
-        'marie_saldo': get_saldo(1), 
-        'kasper_saldo': get_saldo(2),
-        'farmor_saldo': get_saldo(3), 
-        'kirsten_km': get_user_km(0), 
-        'marie_km': get_user_km(1),
-        'kasper_km': get_user_km(2),
-        'farmor_km': get_user_km(3),
-        'km_price': get_km_price(),
-        'bank_saldo': get_bank_saldo()
+        'kirsten_saldo': get_saldo(8), 
+        'marie_saldo': get_saldo(9), 
+        'kasper_saldo': get_saldo(7),
+        'farmor_saldo': get_saldo(10), 
+        'kirsten_km': get_user_km(8), 
+        'marie_km': get_user_km(9),
+        'kasper_km': get_user_km(7),
+        'farmor_km': get_user_km(10),
+        'km_price': get_km_price(request.user.groups),
+        'bank_saldo': get_bank_saldo(),
         }
     return render(request, 'oversigter/oversigt.html', context)
 
 
+def guest_oversigt(request):
+    context = {
+        'username': request.user.username,
+        'user_saldo': get_saldo(0),
+        'user_km': get_user_km(0)
+        }
+    return render(request, 'oversigter/guest_oversigt.html', context)
+
+
+@login_required(login_url='login')
 def show_all_transactions(request):
     all_data = get_all_data()
     context = {'entries': all_data}
     return render(request, 'oversigter/all_transactions.html', context)
 
 
-def show_user_transactions(request, userIDname):
-    userID = get_userID(userIDname)
-
-    user_data = get_user_data(userID)
+@login_required(login_url='login')
+def show_user_transactions(request, username):
     
-    context = {'user': userIDname, 'entries': user_data}
+    user_data = get_user_data(username)
+    
+    context = {'user': username, 'entries': user_data}
     return render(request, 'oversigter/user_transactions.html', context)
 
 

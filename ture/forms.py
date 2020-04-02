@@ -1,12 +1,12 @@
 from django import forms
 from .models import Ture
-from db_functions.db_data import get_current_km
+from db_functions.transactions import get_current_km
 
 
-CHOICES=[(0,'Kirsten'),
-         (1,'Marie'),
-         (2,'Kasper'),
-         (3,'Farmor & Farfar'),
+CHOICES=[(8,'Kirsten'),
+         (9,'Marie'),
+         (7,'Kasper'),
+         (10,'Farmor & Farfar'),
          (4,'Tur mangler')
         ]
 

@@ -1,12 +1,6 @@
 from django import forms
 from .models import Tankning, Betaling, Udgift
-
-
-CHOICES=[(0,'Kirsten'),
-         (1,'Marie'),
-         (2,'Kasper'),
-         (3,'Farmor & Farfar')
-        ]
+from db_functions.users import get_choices
 
 
 class DateInput(forms.DateInput):
@@ -14,27 +8,34 @@ class DateInput(forms.DateInput):
 
 
 class TankningForm(forms.ModelForm):
-    class Meta:
-        model = Tankning
-        fields = [
-            'date',
-            'amount',
-            'user_id'
-        ]
-        widgets = {
-            'date': DateInput(attrs={'class': 'input'}),
-        }
-        labels = {
-            'date': 'Dato',
-        }
-    amount = forms.FloatField(label='Beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
-    user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
+  def __init__(self, user, *args, **kwargs):
+      super(TankningForm, self).__init__(*args, **kwargs)
+      self.fields['user_id'] = forms.CharField(label='', widget=forms.RadioSelect(choices=get_choices(user.groups), attrs={'class': 'checkbox'}))
+      self.fields['user_id'].initial = user.id
+
+  class Meta:
+      model = Tankning
+      fields = [
+          'date',
+          'amount',
+          'user_id'
+      ]
+      widgets = {
+          'date': DateInput(attrs={'class': 'input'}),
+      }
+      labels = {
+          'date': 'Dato',
+      }
+  
+  amount = forms.FloatField(label='Beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
+  # user_id = forms.CharField(label='', widget=forms.RadioSelect(attrs={'class': 'checkbox'}))
 
 
 class BetalingForm(forms.ModelForm):
-    amount = forms.FloatField(label='Overført beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
-    user_id = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
-    
+    def __init__(self, user, *args, **kwargs):
+        super(BetalingForm, self).__init__(*args, **kwargs)
+        self.fields['user_id'] = forms.CharField(label='', widget=forms.RadioSelect(choices=get_choices(user), attrs={'class': 'checkbox'}))
+
     class Meta:
         model = Betaling
         fields = [
@@ -48,12 +49,17 @@ class BetalingForm(forms.ModelForm):
         labels = {
             'date': 'Dato',
         }
+    
+    amount = forms.FloatField(label='Overført beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
+    user_id = forms.CharField(label='', widget=forms.RadioSelect(attrs={'class': 'checkbox'}))
+    indskud = forms.BooleanField(required=False)
 
 
 class UdgiftForm(forms.ModelForm):
-    amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
-    description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'class': 'text-input', 'rows':1, 'cols':30}))
-    user_id = forms.CharField(label='Hvem har betalt?', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
+    def __init__(self, user, *args, **kwargs):
+        super(UdgiftForm, self).__init__(*args, **kwargs)
+        self.fields['user_id'] = forms.CharField(label='', widget=forms.RadioSelect(choices=get_choices(user), attrs={'class': 'checkbox'}))
+  
     class Meta:
         model = Udgift
         fields = [
@@ -69,13 +75,17 @@ class UdgiftForm(forms.ModelForm):
             'date': 'Dato',
             'user_id': 'Hvem har betalt?'
         }
+    
+    amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
+    description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'class': 'text-input', 'rows':1, 'cols':30}))
+    user_id = forms.CharField(label='Hvem har betalt?', widget=forms.RadioSelect(attrs={'class': 'checkbox'}))
 
 
-AdminCHOICES=[(0,'Kirsten'),
-         (1,'Marie'),
-         (2,'Kasper'),
-         (3,'Farmor & Farfar'),
-         (4,'Bank konto')
+AdminCHOICES=[(8,'Kirsten'),
+         (9,'Marie'),
+         (7,'Kasper'),
+         (10,'Farmor & Farfar'),
+         (12,'Bank konto')
         ]
 
 SPLIT=[(0,'Ja'),

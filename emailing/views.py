@@ -4,46 +4,33 @@ from django.core.mail import send_mail
 from datetime import datetime, timedelta, time
 from django.views.generic import TemplateView
 from .forms import UserPrefForm
-from db_functions.db_data import get_saldo, get_email_prefs, update_email_prefs, get_userID, get_usernames, get_email_que, update_email_que
+from db_functions.emails import get_email_prefs, update_email_prefs, get_email_que, update_email_que
+from db_functions.users import request_user_IDs, get_usernames
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 class UserPref(TemplateView):
     template_name = 'emailing/user_pref.html'
 
     def get(self, request):
-        form = UserPrefForm()
-        user_id = get_userID(request.user.username)
-        form.fields['user_prefs'].initial = get_email_prefs(user_id)
+        form = UserPrefForm(request.user.groups)
+        form.fields['user_prefs'].initial = get_email_prefs(request.user.id)
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
-        form = UserPrefForm(request.POST)
-        
+        form = UserPrefForm(request.user, request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            user_id = get_userID(request.user.username)
-            update_email_prefs(user_id, data)
+            update_email_prefs(request.user.id, data)
         else:
-            user_id = get_userID(request.user.username)
-            update_email_prefs(user_id, {'user_prefs': "[]"})
+            update_email_prefs(request.user.id, {'user_prefs': "[]"})
         return redirect('users/index')
 
 
 def send_mail_to_user(user_id, subject, message):
-  if user_id == 0:
-    recepient = 'kanyhus@gmail.com' #nyhuskirsten@gmail.com
-  elif user_id == 1:
-    recepient = 'kanyhus@gmail.com' #marienyhusjanssen@gmail.com
-  elif user_id == 2:
-    recepient = 'kanyhus@gmail.com' #nyhuskaae@gmail.com
-  elif user_id == 3:
-    recepient = 'kanyhus@gmail.com' #janssen.per@gmail.com
-  elif user_id == 4:
-    recepient = 'ford.ka.korsel@gmail.com'
-  else:
-    recepient = 'ford.ka.korsel@gmail.com'
-    message = 'email failed\n' + message
-  
+  user = User.objects.get(id=user_id)
+  recepient = user.email
   send_mail(subject, message, EMAIL_HOST_USER, [recepient], fail_silently = False)
 
 
@@ -69,23 +56,24 @@ def send_monthly_saldo_mail():
   
   subject = 'Ford Ka Kørsel - ' + month + ' ' + year
 
-  for user in range(4):
+  for user in request_user_IDs():
     email_pref = get_email_prefs(user)
     
     for pref in email_pref:
       if pref == 0:
         amount = round(get_saldo(user), 2)
-        username = get_usernames(str(user))
+        username = get_usernames(user)
         message = 'Hej ' + username + ',\n \nDu skylder Ford-KA\'ssen: ' + str(amount) + ' kr. \n MobilePay til Kasper på 61681287 og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
-
-        send_mail_to_user(user, subject, message)
+        
+        if amount != 0:
+          send_mail_to_user(user, subject, message)
 
 
 def udgift_oprettet_mail(username, data):
   subject = 'Ford Ka Kørsel - Udgift registreret'
   message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' oprettet en udgift på ' + str(round(data['amount'], 2)) + ' kr. med teksten:\n' + data['description'] + '.\n \n Mvh \nFord Ka Kørsel aps'
 
-  for user in range(4):
+  for user in request_user_IDs():
     email_pref = get_email_prefs(user)
 
     for pref in email_pref:
@@ -100,7 +88,7 @@ def tankning_oprettet_mail(username, data):
   subject = 'Ford Ka Kørsel - Tankning registreret'
   message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' registreret en tankning på ' + str(round(data['amount'], 2)) + ' kr.\n \n Mvh \nFord Ka Kørsel aps'
 
-  for user in range(4):
+  for user in request_user_IDs():
     email_pref = get_email_prefs(user)
 
     for pref in email_pref:
@@ -116,7 +104,7 @@ def tur_oprettet_mail(username, data):
   subject = 'Ford Ka Kørsel - Tur registreret'
   message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' registreret en tur.\nAktuel km-tæller: ' + str(data['km_count']) + ' km.\n \n Mvh \nFord Ka Kørsel aps'
 
-  for user in range(4):
+  for user in request_user_IDs():
     email_pref = get_email_prefs(user)
 
     for pref in email_pref:
@@ -156,7 +144,7 @@ def send_all_mails_in_Q():
 #######################
 
 def last_day_of_month(any_day):
-  next_month = any_day.replace(day=28) + timedelta(days=4)  # this will never fail
+  next_month = any_day.replace(day=28) + timedelta(days=4)
   return next_month - timedelta(days=next_month.day)
 
 

@@ -1,7 +1,8 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm, AdminUdgiftForm
-from db_functions.db_data import get_usernames, get_userID, update_user_account, delete_transaction, update_accounts, update_user_saldo, update_bank_account
+from db_functions.users import get_usernames, update_user_account, update_accounts, update_user_saldo
+from db_functions.transactions import update_bank_account
 from emailing.views import udgift_oprettet_mail, tankning_oprettet_mail, indbetaling_oprettet_mail
 
 from django.views.generic.edit import UpdateView
@@ -13,13 +14,13 @@ class CreateTankning(TemplateView):
     template_name = 'transactions/tankning.html'
     
     def get(self, request):
-        form = TankningForm()
-        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
+        form = TankningForm(request.user)
+        #form.fields['user_id'].initial = #get_userID(request.user.username) # auto check current user logged in
         
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
-        form = TankningForm(request.POST)
+        form = TankningForm(request.user.groups, request.POST)
         
         if form.is_valid():
             print('----------- tankning registreret --------------')
@@ -43,17 +44,21 @@ class CreateBetaling(TemplateView):
     template_name = 'transactions/betaling.html'
 
     def get(self, request):
-        form = BetalingForm()
-        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
+        form = BetalingForm(request.user.groups)
+        form.fields['user_id'].initial = request.user.id # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
-        form = BetalingForm(request.POST)
+        form = BetalingForm(request.user.groups, request.POST)
         
         if form.is_valid():
             print('----------- indbetaling registreret --------------')
             data = form.cleaned_data
-            new_id = update_accounts(request, data, 'Indbetaling')
+
+            if data['indskud']:
+              new_id = update_accounts(request, data, 'Indskud')
+            else:
+              new_id = update_accounts(request, data, 'Indbetaling')
             
             save_with_id = form.save(commit=False)
             save_with_id.transaction_id = new_id
@@ -74,12 +79,12 @@ class CreateUdgift(TemplateView):
     template_name = 'transactions/udgift.html'
 
     def get(self, request):
-        form = UdgiftForm()
-        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
+        form = UdgiftForm(request.user.groups)
+        form.fields['user_id'].initial = request.user.id # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
-        form = UdgiftForm(request.POST)
+        form = UdgiftForm(request.user.groups, request.POST)
         
         if form.is_valid():
             print('----------- udgift registreret --------------!!')
@@ -104,7 +109,7 @@ class CreateAdminUdgift(TemplateView):
 
     def get(self, request):
         form = AdminUdgiftForm()
-        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
+        form.fields['user_id'].initial = request.user.id # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
@@ -171,7 +176,7 @@ class CreateUdbetaling(TemplateView):
 
     def get(self, request):
         form = BetalingForm()
-        form.fields['user_id'].initial = get_userID(request.user.username) # auto check current user logged in
+        form.fields['user_id'].initial = request.user.id # auto check current user logged in
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):

@@ -3,6 +3,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 
 
+
 def login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -19,6 +20,11 @@ def login(request):
     else:
         return render(request, 'partials/_login.html')
 
+
 def logout(request):
     auth.logout(request)
-    return redirect('users/index')
+    return redirect('index')
+
+
+def is_VIP(user):
+    return user.groups.filter(name='VIP').exists()

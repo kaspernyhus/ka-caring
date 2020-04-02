@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+{% load i18n %}
+{% load l10n %}
+
+
+{% block content %}
+
+
+{% include 'partials/topbar.html' %}
+<h1 class="header">Ford KA-Kørsel</h1>
+
+{% if user.is_authenticated %}
+
+{% language 'de' %}
+<p class="header">Km-tæller:</p>
+<p class="header"><b>{{current_km|intcomma}} km</b></p>
+{% endlanguage %}
+
+
+<div class="center">
+    <a href="{% url 'create_tur' %}" class="button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5H6.5C5.84 5 5.29 5.42 5.08 6.01L3 12V20C3 20.55 3.45 21 4 21H5C5.55 21 6 20.55 6 20V19H18V20C18 20.55 18.45 21 19 21H20C20.55 21 21 20.55 21 20V12L18.92 6.01ZM6.5 16C5.67 16 5 15.33 5 14.5C5 13.67 5.67 13 6.5 13C7.33 13 8 13.67 8 14.5C8 15.33 7.33 16 6.5 16ZM17.5 16C16.67 16 16 15.33 16 14.5C16 13.67 16.67 13 17.5 13C18.33 13 19 13.67 19 14.5C19 15.33 18.33 16 17.5 16ZM5 11L6.5 6.5H17.5L19 11H5Z" fill="#19351F"/>
+        </svg>
+        <span>Tur</span>
+    </a>
+    <a href="{% url 'create_tankning' %}" class="button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.77 7.23L19.78 7.22L16.06 3.5L15 4.56L17.11 6.67C16.17 7.03 15.5 7.93 15.5 9C15.5 10.38 16.62 11.5 18 11.5C18.36 11.5 18.69 11.42 19 11.29V18.5C19 19.05 18.55 19.5 18 19.5C17.45 19.5 17 19.05 17 18.5V14C17 12.9 16.1 12 15 12H14V5C14 3.9 13.1 3 12 3H6C4.9 3 4 3.9 4 5V21H14V13.5H15.5V18.5C15.5 19.88 16.62 21 18 21C19.38 21 20.5 19.88 20.5 18.5V9C20.5 8.31 20.22 7.68 19.77 7.23ZM12 10H6V5H12V10ZM18 10C17.45 10 17 9.55 17 9C17 8.45 17.45 8 18 8C18.55 8 19 8.45 19 9C19 9.55 18.55 10 18 10Z" fill="#19351F"/>
+        </svg>
+        <span>Tankning</span>
+    </a>
+    
+    <a href="{% if request.user.username == 'kacaring' %} {% url 'create_admin_udgift' %} {% else %} {% url 'create_udgift' %} {% endif %}" class="button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.8 10.9C9.53 10.31 8.8 9.7 8.8 8.75C8.8 7.66 9.81 6.9 11.5 6.9C13.28 6.9 13.94 7.75 14 9H16.21C16.14 7.28 15.09 5.7 13 5.19V3H10V5.16C8.06 5.58 6.5 6.84 6.5 8.77C6.5 11.08 8.41 12.23 11.2 12.9C13.7 13.5 14.2 14.38 14.2 15.31C14.2 16 13.71 17.1 11.5 17.1C9.44 17.1 8.63 16.18 8.52 15H6.32C6.44 17.19 8.08 18.42 10 18.83V21H13V18.85C14.95 18.48 16.5 17.35 16.5 15.3C16.5 12.46 14.07 11.49 11.8 10.9Z" fill="#19351F"/>
+        </svg>
+        <span>Udgift</span>
+    </a>
+    
+    <a href="{% url 'create_betaling' %}" class="button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4H4C2.89 4 2.01 4.89 2.01 6L2 18C2 19.11 2.89 20 4 20H20C21.11 20 22 19.11 22 18V6C22 4.89 21.11 4 20 4ZM20 18H4V12H20V18ZM20 8H4V6H20V8Z" fill="#19351F"/>
+        </svg>
+        <span>Indbetaling</span>            
+    </a>
+    <a href="{% url 'show_bookings' %}" class="button">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 4H19C19.5304 4 20.0391 4.21071 20.4142 4.58579C20.7893 4.96086 21 5.46957 21 6V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V6C3 4.9 3.9 4 5 4ZM5 9V19H19V9H5Z" fill="#19351F"/>
+        <path d="M13 13H16V16H13V13ZM7 2C7.26522 2 7.51957 2.10536 7.70711 2.29289C7.89464 2.48043 8 2.73478 8 3V6C8 6.26522 7.89464 6.51957 7.70711 6.70711C7.51957 6.89464 7.26522 7 7 7C6.73478 7 6.48043 6.89464 6.29289 6.70711C6.10536 6.51957 6 6.26522 6 6V3C6 2.73478 6.10536 2.48043 6.29289 2.29289C6.48043 2.10536 6.73478 2 7 2ZM17 2C17.2652 2 17.5196 2.10536 17.7071 2.29289C17.8946 2.48043 18 2.73478 18 3V6C18 6.26522 17.8946 6.51957 17.7071 6.70711C17.5196 6.89464 17.2652 7 17 7C16.7348 7 16.4804 6.89464 16.2929 6.70711C16.1054 6.51957 16 6.26522 16 6V3C16 2.73478 16.1054 2.48043 16.2929 2.29289C16.4804 2.10536 16.7348 2 17 2Z" fill="#19351F"/>
+        </svg>
+        <span>Bookinger</span>    
+    </a>
+    
+
+    {% if request.user.username == 'kacaring' %} 
+    <br>
+    <a href="{% url 'create_udbetaling' %}" class="button">
+      <span>Udbetaling</span>            
+    </a>
+    
+    <a href="#" class="button">
+        <span>Bookinger</span>    
+    </a>
+    
+    <a href="{% url 'check_scheduler' %}" class="button">
+        Send emails i kø
+    </a> 
+    {% endif %}
+
+</div>
+
+{% else %}
+<div class="center">
+    <a href="{% url 'login' %}" class="button">Login</a>
+</div>
+{% endif %}
+
+{% endblock %}s
