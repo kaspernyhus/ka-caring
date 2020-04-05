@@ -3,8 +3,6 @@ from datetime import date, datetime, timedelta
 from db_functions.users import get_choices
 
 
-
-
 class DateInput(forms.DateInput):
     input_type = 'date'
 

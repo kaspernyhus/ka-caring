@@ -10,10 +10,13 @@ class TransactionId(models.Model):
   user = models.CharField(max_length=20, default='AnonymousUser')
   
 
+#############################
+#       User accounts       #
+#############################
+
 class Kirsten(models.Model):
   class Meta:
     verbose_name_plural = '4. Kirsten'
-
   timestamp = models.DateTimeField(default=timezone.now)
   saldo = models.FloatField(default=0.0)
   amount = models.FloatField(default=0.0)
@@ -25,7 +28,6 @@ class Kirsten(models.Model):
 class Marie(models.Model):
   class Meta:
     verbose_name_plural = '1. Marie'
-
   timestamp = models.DateTimeField(default=timezone.now)
   saldo = models.FloatField(default=0.0)
   amount = models.FloatField(default=0.0)
@@ -37,7 +39,6 @@ class Marie(models.Model):
 class Kasper(models.Model):
   class Meta:
     verbose_name_plural = '2. Kasper'
-
   timestamp = models.DateTimeField(default=timezone.now)
   saldo = models.FloatField(default=0.0)
   amount = models.FloatField(default=0.0)
@@ -49,7 +50,6 @@ class Kasper(models.Model):
 class FarMor(models.Model):
   class Meta:
     verbose_name_plural = '3. Farmor & Farfar'
-
   timestamp = models.DateTimeField(default=timezone.now)
   saldo = models.FloatField(default=0.0)
   amount = models.FloatField(default=0.0)
@@ -58,10 +58,9 @@ class FarMor(models.Model):
   transaction = models.ForeignKey(TransactionId, on_delete=models.CASCADE)
 
 
-class Guest(models.Model):
+class Gabriel(models.Model):
   class Meta:
-    verbose_name_plural = '5. Guest'
-
+    verbose_name_plural = '5. Gabriel'
   timestamp = models.DateTimeField(default=timezone.now)
   saldo = models.FloatField(default=0.0)
   amount = models.FloatField(default=0.0)
@@ -69,6 +68,11 @@ class Guest(models.Model):
   category = models.CharField(blank=True, max_length=50)
   transaction = models.ForeignKey(TransactionId, on_delete=models.CASCADE)
 
+
+
+#############################
+#     Bank & KM-price       #
+#############################
 
 class KmPrice(models.Model):
   class Meta:

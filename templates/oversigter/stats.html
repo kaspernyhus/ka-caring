@@ -18,10 +18,9 @@
     <p class="header">- kr.</p>
 
     <h4 class="header">Brugsfordeling</h4>
-    <p class="header">Kirsten: {{usage.0}}%</p>
-    <p class="header">Marie: {{usage.1}}%</p>
-    <p class="header">Kasper: {{usage.2}}%</p>
-    <p class="header">Farmor & Farfar: {{usage.3}}%</p>
+    {% for user in usage %}
+    <p class="header">{{user.username}}: {{user.usage}}%</p>
+    {% endfor %}
 </div>
 
 <div class="center">

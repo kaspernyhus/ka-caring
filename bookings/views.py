@@ -155,6 +155,7 @@ def create_booking(request):
 
   return render(request, 'calendar/create_event.html', context={'form': form})
 
+
 ################################
 #   GMAIL API IMPLEMENTATION   #
 ################################

@@ -14,7 +14,7 @@ class UserPref(TemplateView):
     template_name = 'emailing/user_pref.html'
 
     def get(self, request):
-        form = UserPrefForm(request.user.groups)
+        form = UserPrefForm(request.user)
         form.fields['user_prefs'].initial = get_email_prefs(request.user.id)
         return render(request, self.template_name, {'form': form})
     
@@ -25,7 +25,7 @@ class UserPref(TemplateView):
             update_email_prefs(request.user.id, data)
         else:
             update_email_prefs(request.user.id, {'user_prefs': "[]"})
-        return redirect('users/index')
+        return redirect('/')
 
 
 def send_mail_to_user(user_id, subject, message):
@@ -69,57 +69,37 @@ def send_monthly_saldo_mail():
           send_mail_to_user(user, subject, message)
 
 
-def udgift_oprettet_mail(username, data):
-  subject = 'Ford Ka Kørsel - Udgift registreret'
-  message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' oprettet en udgift på ' + str(round(data['amount'], 2)) + ' kr. med teksten:\n' + data['description'] + '.\n \n Mvh \nFord Ka Kørsel aps'
-
-  for user in request_user_IDs():
-    email_pref = get_email_prefs(user)
-
-    for pref in email_pref:
-      if pref == 1:
-        email = {'user_id': user, 'subject': subject, 'message': message}
-        emailQue_add(email)
-  email = {'user_id': 4, 'subject': subject, 'message': message}
-  emailQue_add(email)
-
-
-def tankning_oprettet_mail(username, data):
-  subject = 'Ford Ka Kørsel - Tankning registreret'
-  message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' registreret en tankning på ' + str(round(data['amount'], 2)) + ' kr.\n \n Mvh \nFord Ka Kørsel aps'
-
-  for user in request_user_IDs():
-    email_pref = get_email_prefs(user)
-
-    for pref in email_pref:
-      if pref == 2:
-        email = {'user_id': user, 'subject': subject, 'message': message}
-        emailQue_add(email)
+def add_to_mail_Q(username, data, category):
+  if category == 'Udgift':
+    subject = 'Ford Ka Kørsel - Udgift registreret'
+    message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' oprettet en udgift på ' + str(round(data['amount'], 2)) + ' kr. med teksten:\n' + data['description'] + '.\n \n Mvh \nFord Ka Kørsel aps'
+  elif category == 'Tankning':
+    subject = 'Ford Ka Kørsel - Tankning registreret'
+    message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' registreret en tankning på ' + str(round(data['amount'], 2)) + ' kr.\n \n Mvh \nFord Ka Kørsel aps'
+  elif category == 'Tur':
+    subject = 'Ford Ka Kørsel - Tur registreret'
+    message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' registreret en tur.\nAktuel km-tæller: ' + str(data['km_count']) + ' km.\n \n Mvh \nFord Ka Kørsel aps'
+  elif category == 'Indbetaling':
+    subject = 'Ford Ka Kørsel - Indbetaling registreret'
+    message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' registreret en indbetaling fra ' + str(get_usernames(data['user_id'])) + ' (userID: ' + str(data['user_id']) + ') på ' + str(data['amount']) + ' kr.\n \n Mvh \nFord Ka Kørsel aps'
   
-  email = {'user_id': 4, 'subject': subject, 'message': message}
-  emailQue_add(email)
+  if subject and message:
+    for user in request_user_IDs():
+      email_pref = get_email_prefs(user)
 
-
-def tur_oprettet_mail(username, data):
-  subject = 'Ford Ka Kørsel - Tur registreret'
-  message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' registreret en tur.\nAktuel km-tæller: ' + str(data['km_count']) + ' km.\n \n Mvh \nFord Ka Kørsel aps'
-
-  for user in request_user_IDs():
-    email_pref = get_email_prefs(user)
-
-    for pref in email_pref:
-      if pref == 3:
-        email = {'user_id': user, 'subject': subject, 'message': message}
-        emailQue_add(email)
-  email = {'user_id': 4, 'subject': subject, 'message': message}
-  emailQue_add(email)
-
-
-def indbetaling_oprettet_mail(username, data):
-  subject = 'Ford Ka Kørsel - Indbetaling registreret'
-  message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' registreret en indbetaling fra ' + str(get_usernames(data['user_id'])) + ' (userID: ' + str(data['user_id']) + ') på ' + str(data['amount']) + ' kr.\n \n Mvh \nFord Ka Kørsel aps'
-  email = {'user_id': 4, 'subject': subject, 'message': message}
-  emailQue_add(email)
+      for pref in email_pref:
+        if category == 'Udgift' and pref == 1:
+          email = {'user_id': user, 'subject': subject, 'message': message}
+          emailQue_add(email)
+        if category == 'Tankning' and pref == 2:
+          email = {'user_id': user, 'subject': subject, 'message': message}
+          emailQue_add(email)
+        if category == 'Tur' and pref == 3:
+          email = {'user_id': user, 'subject': subject, 'message': message}
+          emailQue_add(email)
+        if category == 'Indbetaling' and pref == 4:
+          email = {'user_id': user, 'subject': subject, 'message': message}
+          emailQue_add(email)
 
 
 def emailQue_add(data):

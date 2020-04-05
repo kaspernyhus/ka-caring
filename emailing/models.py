@@ -1,10 +1,14 @@
 from django.db import models
+from django.conf import settings
 
-class UserPreferences(models.Model):
-  monthly_saldo = models.CharField(max_length=50, default="[{'0':'0', '1':'0', '2':'0', '3':'0'}]")
-  udgift_oprettet = models.CharField(max_length=50, default="[{'0':'0', '1':'0', '2':'0', '3':'0'}]")
-  tankning_oprettet = models.CharField(max_length=50, default="[{'0':'0', '1':'0', '2':'0', '3':'0'}]")
-  tur_oprettet = models.CharField(max_length=50, default="[{'0':'0', '1':'0', '2':'0', '3':'0'}]")
+
+class EmailPreferences(models.Model):
+  user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+  monthly_saldo = models.BooleanField(default=True)
+  udgift_oprettet = models.BooleanField(default=False)
+  tankning_oprettet = models.BooleanField(default=False)
+  tur_oprettet = models.BooleanField(default=False)
+  indbetaling_oprettet = models.BooleanField(default=False)
 
 
 class EmailQue(models.Model):

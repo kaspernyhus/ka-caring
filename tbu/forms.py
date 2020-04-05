@@ -28,20 +28,23 @@ class TankningForm(forms.ModelForm):
       }
   
   amount = forms.FloatField(label='Beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
-  # user_id = forms.CharField(label='', widget=forms.RadioSelect(attrs={'class': 'checkbox'}))
-
+  
 
 class BetalingForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(BetalingForm, self).__init__(*args, **kwargs)
-        self.fields['user_id'] = forms.CharField(label='', widget=forms.RadioSelect(choices=get_choices(user), attrs={'class': 'checkbox'}))
+        self.fields['user_id'] = forms.CharField(label='', widget=forms.RadioSelect(choices=get_choices(user.groups), attrs={'class': 'checkbox'}))
+        self.fields['user_id'].initial = user.id
+
+        if user.groups.filter(name='VIP').exists() or user.groups.filter(name='ALL').exists():
+            self.fields['is_indskud'] = forms.BooleanField(label='Indskud:', required=False)
 
     class Meta:
         model = Betaling
         fields = [
             'date', 
             'amount',
-            'user_id'
+            'user_id',
         ]
         widgets = {
             'date': DateInput(attrs={'class': 'input'}),
@@ -51,19 +54,47 @@ class BetalingForm(forms.ModelForm):
         }
     
     amount = forms.FloatField(label='Overført beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
-    user_id = forms.CharField(label='', widget=forms.RadioSelect(attrs={'class': 'checkbox'}))
-    indskud = forms.BooleanField(required=False)
+    
+
+class UdbetalingForm(forms.ModelForm):
+    def __init__(self, user, *args, **kwargs):
+        super(UdbetalingForm, self).__init__(*args, **kwargs)
+        self.fields['user_id'] = forms.CharField(label='Hvem skal beløbet udbetales til?', widget=forms.RadioSelect(choices=get_choices(user.groups), attrs={'class': 'checkbox'}))
+        
+
+    class Meta:
+        model = Betaling
+        fields = [
+            'date', 
+            'amount',
+            'user_id',
+        ]
+        widgets = {
+            'date': DateInput(attrs={'class': 'input'}),
+        }
+        labels = {
+            'date': 'Dato',
+        }
+    
+    amount = forms.FloatField(label='Overført beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
+    
 
 
 class UdgiftForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(UdgiftForm, self).__init__(*args, **kwargs)
-        self.fields['user_id'] = forms.CharField(label='', widget=forms.RadioSelect(choices=get_choices(user), attrs={'class': 'checkbox'}))
-  
+        
+        CHOICES = get_choices(user.groups)
+        if user.groups.filter(name='ALL').exists():
+            CHOICES.append((0,'Fælles-konto'))
+
+        self.fields['user_id'] = forms.CharField(label='', widget=forms.RadioSelect(choices=CHOICES, attrs={'class': 'checkbox'}))
+        self.fields['user_id'].initial = user.id
+
     class Meta:
         model = Udgift
         fields = [
-            'date', 
+            'date',
             'amount',
             'description',
             'user_id'
@@ -78,39 +109,4 @@ class UdgiftForm(forms.ModelForm):
     
     amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
     description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'class': 'text-input', 'rows':1, 'cols':30}))
-    user_id = forms.CharField(label='Hvem har betalt?', widget=forms.RadioSelect(attrs={'class': 'checkbox'}))
-
-
-AdminCHOICES=[(8,'Kirsten'),
-         (9,'Marie'),
-         (7,'Kasper'),
-         (10,'Farmor & Farfar'),
-         (12,'Bank konto')
-        ]
-
-SPLIT=[(0,'Ja'),
-        (1,'Nej')
-        ]
-
-class AdminUdgiftForm(forms.ModelForm):
-    amount = forms.FloatField(label='Betalt beløb:', widget=forms.NumberInput(attrs={'class': 'input', 'type':'number', 'pattern': "\d*"}))
-    description = forms.CharField(label='Beskrivelse', widget=forms.Textarea(attrs={'class': 'text-input', 'rows':1, 'cols':30}))
-    user_id = forms.CharField(label='Hvem har betalt?', widget=forms.RadioSelect(choices=AdminCHOICES, attrs={'class': 'checkbox'}))
-    split = forms.CharField(label='Split mellem brugere?', widget=forms.Select(choices=SPLIT))
     
-    class Meta:
-        model = Udgift
-        fields = [
-            'date', 
-            'amount',
-            'description',
-            'user_id',
-            'split'
-        ]
-        widgets = {
-            'date': DateInput(attrs={'class': 'input'}),
-        }
-        labels = {
-            'date': 'Dato',
-            'user_id': 'Hvem har betalt?'
-        }

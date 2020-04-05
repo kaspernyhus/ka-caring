@@ -1,20 +1,13 @@
 from django.shortcuts import render
-from db_functions.users import get_user_km
-from db_functions.transactions import get_current_km, get_total_tankning
-from users.views import is_VIP
+from db_functions.users import get_user_km, is_VIP, request_user_IDs, get_usernames
+from db_functions.transactions import get_current_km, get_total_tankning, get_total_km
 from django.contrib.auth.decorators import login_required, user_passes_test
-
-
-def get_total_km():
-  km = get_current_km()
-  km = km - 114293 #km ved overtagelse
-  return km
 
 
 @login_required(login_url='login')
 @user_passes_test(is_VIP, login_url='guest_stats')
 def show_stats(request):
-  context = {'total_km': get_total_km ,'pris_pr_km': calc_km_fuel_price(), 'usage': calc_usage()}
+  context = {'total_km': get_total_km ,'pris_pr_km': calc_km_fuel_price(), 'usage': calc_usage()[:-1]}
   return render(request, 'oversigter/stats.html', context)
 
 
@@ -35,13 +28,14 @@ def calc_km_fuel_price():
 
 def calc_usage():
   total_km = get_total_km()
-
+  
   usage = []
 
-  for user in range(4):
-    user_km = get_user_km(user)
+  for user_id in request_user_IDs():
+    user_km = get_user_km(user_id)
     user_usage = (user_km / total_km) * 100
-    usage.append(int(round(user_usage, 0)))
+    user = {'id': user_id, 'username': get_usernames(user_id), 'km': user_km, 'usage': round(user_usage, 0)}
+    usage.append(user)
   return usage
 
 

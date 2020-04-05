@@ -1,21 +1,20 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
-from db_functions.users import get_user_saldo, get_user_km, get_user_data
+from db_functions.users import get_user_saldo, get_user_km, get_user_data, is_VIP
 from db_functions.transactions import get_all_data, get_bank_saldo
 from django.views.generic import DeleteView
 from .models import TransactionId
 from kacaring.km_price import get_km_price
-from users.views import is_VIP
 
 
 @login_required(login_url='login')
 @user_passes_test(is_VIP, login_url='guest_oversigt')
 def oversigt(request):
     context = {
-        'kirsten_saldo': get_saldo(8), 
-        'marie_saldo': get_saldo(9), 
-        'kasper_saldo': get_saldo(7),
-        'farmor_saldo': get_saldo(10), 
+        'kirsten_saldo': get_user_saldo(8), 
+        'marie_saldo': get_user_saldo(9), 
+        'kasper_saldo': get_user_saldo(7),
+        'farmor_saldo': get_user_saldo(10), 
         'kirsten_km': get_user_km(8), 
         'marie_km': get_user_km(9),
         'kasper_km': get_user_km(7),
@@ -29,25 +28,22 @@ def oversigt(request):
 def guest_oversigt(request):
     context = {
         'username': request.user.username,
-        'user_saldo': get_saldo(0),
-        'user_km': get_user_km(0)
+        'user_saldo': get_user_saldo(request.user.id),
+        'user_km': get_user_km(request.user.id)
         }
     return render(request, 'oversigter/guest_oversigt.html', context)
 
 
 @login_required(login_url='login')
 def show_all_transactions(request):
-    all_data = get_all_data()
-    context = {'entries': all_data}
+    context = {'entries': get_all_data()[:-1]}
     return render(request, 'oversigter/all_transactions.html', context)
 
 
 @login_required(login_url='login')
 def show_user_transactions(request, username):
-    
     user_data = get_user_data(username)
-    
-    context = {'user': username, 'entries': user_data}
+    context = {'user': username, 'entries': user_data[:-1]}
     return render(request, 'oversigter/user_transactions.html', context)
 
 

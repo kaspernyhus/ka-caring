@@ -2,10 +2,9 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from .forms import TurForm
 from kacaring.km_price import get_km_price
-from db_functions.transactions import get_current_km
-from db_functions.users import get_usernames, extra_pas, update_accounts, update_user_km
-from emailing.views import tur_oprettet_mail
-
+from db_functions.transactions import create_new_transaction, get_current_km, update_accounts, update_user_km
+from db_functions.users import get_usernames, extra_pas
+from emailing.views import add_to_mail_Q
 from django.views.generic.edit import UpdateView
 from .models import Ture
 
@@ -14,19 +13,20 @@ class CreateTur(TemplateView):
     template_name = 'transactions/tur.html'
     
     def get(self, request):
-        data = {'km_count': get_current_km()}
-        form = TurForm(initial=data)
-        form.fields['user_id'].initial = request.user.id # auto check current user logged in
+        form = TurForm(request.user)
         return render(request, self.template_name, {'form': form, 'km_price': get_km_price(request.user.groups)})
     
     def post(self, request):
-        form = TurForm(request.POST)
+        form = TurForm(request.user, request.POST)
         if form.is_valid():
             data = form.cleaned_data
+            new_id = create_new_transaction(request, 'Tur')
+            
             previous_km_count = get_current_km()
             
             if data['km_count'] > previous_km_count:
                 form_obj = form.save(commit=False)
+                form_obj.transaction_id = new_id
 
                 km = data['km_count'] - previous_km_count
                 tur_pris = km * get_km_price(request.user.groups)
@@ -35,21 +35,19 @@ class CreateTur(TemplateView):
                 form_obj.price = tur_pris
                 
                 data.update({'amount': tur_pris})
-                new_id = update_accounts(request, data, 'Tur', km=km)
-
-                form_obj.transaction_id = new_id                
+                
+                update_accounts(request, new_id, data, 'Tur', km=km)
+   
                 form_obj.save()
                 
-                tur_oprettet_mail(request.user.username, data)
+                add_to_mail_Q(request.user.username, data, 'Tur')
 
-                context = {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(data['user_id']), 'extra_pas': extra_pas(data)[1]}
+                context = {'km': km, 'tur_pris': tur_pris, 'users': get_usernames(eval(data['user_id'])), 'extra_pas': extra_pas(data)[1]}
                 return render(request, 'transactions/tur_confirm.html', context)
             
             else:
                 return render(request, 'transactions/form_error.html', {'error': 'Nuværende kilometertælleraflæsning skal være højere end den seneste!'})
-            
         else:
-            print('------------------------ form not valid ------------------------')
             return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en eller flere brugere'})
 
 

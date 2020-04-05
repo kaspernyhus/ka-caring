@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import UserPreferences, EmailQue
+from .models import EmailPreferences, EmailQue
 
 
 class EmailPrefAdmin(admin.ModelAdmin):
-    list_display = ('id','monthly_saldo', 'udgift_oprettet', 'tankning_oprettet', 'tur_oprettet')
+    list_display = ('user_id','monthly_saldo', 'udgift_oprettet', 'tankning_oprettet', 'tur_oprettet')
 
-admin.site.register(UserPreferences, EmailPrefAdmin)
+admin.site.register(EmailPreferences, EmailPrefAdmin)
 admin.site.register(EmailQue)
