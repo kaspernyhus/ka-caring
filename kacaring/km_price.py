@@ -2,7 +2,7 @@ from accounts.models import KmPrice
 
 def get_km_price(user):
 
-    if user.filter(name='VIP').exists():
+    if user.filter(name='VIP').exists() or user.filter(name='ALL').exists():
       price = 1
     
     else:
