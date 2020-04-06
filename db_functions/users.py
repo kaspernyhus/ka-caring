@@ -9,7 +9,7 @@ import db_functions
 ###############################
 
 def get_usernames(user_id):
-  print('User_id received: ', user_id, type(user_id))
+  #print('User_id received: ', user_id, type(user_id))
 
   users = get_users()
   users.append({'id': 0, 'username': 'Fælles-konto'})
@@ -20,7 +20,7 @@ def get_usernames(user_id):
   if isinstance(user_id, int):  # if type int value given
     for user in users:
       if user_id == user['id']:
-        print('Users To Return: ', user['username'])
+        #print('Users To Return: ', user['username'])
         return user['username']
   
   else:                         # multiple values given e.g. ['7', '8']
@@ -32,8 +32,31 @@ def get_usernames(user_id):
           return user['username']
             """
     users_toreturn = [user['username'] for userid in user_list for user in users if user['id'] == userid]
-    print('Users To Return: ', users_toreturn)
+    # print('Users To Return: ', users_toreturn)
     return users_toreturn
+
+
+def get_firstnames(user_id):
+  #print('User_id received: ', user_id, type(user_id))
+
+  users = get_users()
+  users.append({'id': 0, 'username': 'Fælles-konto', 'first_name': 'Fælles-konto'})
+
+  if isinstance(user_id, str):
+    user_id = eval(user_id)
+  
+  if isinstance(user_id, int):  # if type int value given
+    for user in users:
+      if user_id == user['id']:
+        #print('Users To Return: ', user['username'])
+        return user['first_name']
+  
+  else:                         # multiple values given e.g. ['7', '8']
+    user_list = [eval(user) for user in user_id]
+    users_toreturn = [user['first_name'] for userid in user_list for user in users if user['id'] == userid]
+    # print('Users To Return: ', users_toreturn)
+    return users_toreturn
+
 
 
 def get_userIDs(username):
@@ -49,7 +72,9 @@ def get_userIDs(username):
 
 def get_users():
   users = User.objects.all()
-  return [{'id': user.id, 'username': user.username} for user in users]
+  for user in users:
+    print(user, type(user))
+  return [{'id': user.id, 'username': user.username, 'first_name': user.first_name} for user in users]
 
 
 def request_user_IDs(exclude=6):
