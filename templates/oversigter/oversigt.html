@@ -67,7 +67,9 @@
 </div>
    
     
-    <h4 class="header no-margin-top">Indestående på fælleskonto:</h4>
+    <h4 class="header no-margin-top">
+      <a href="{% url 'show_bank_transactions' %}" class="header_link">Indestående på fælleskonto:</a>
+    </h4>
     <p class="header">{{bank_saldo|floatformat:2}} kr.</p>
 
 

@@ -208,6 +208,21 @@ def update_bank_account(transaction_id, user_id, amount, category, description='
     new_entry.save()
 
 
+def get_bank_transactions():
+    bank_account = OnBankAccount.objects.all().order_by('-id')
+
+    account_data = []
+
+    for transaction in bank_account:
+        try:
+            amount = get_db_entry(transaction.transaction_id).amount
+        except:
+            pass
+        account_data.append({'date': transaction.timestamp, 'category': transaction.category, 'user': get_firstnames(transaction.user), 'amount': amount, 'saldo': transaction.saldo, 'description': transaction.description})
+
+    return account_data
+
+
 
 
 ###############################

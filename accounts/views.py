@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from db_functions.users import get_user_saldo, get_user_km, get_user_data, is_VIP
-from db_functions.transactions import get_all_data, get_bank_saldo
+from db_functions.transactions import get_all_data, get_bank_saldo, get_bank_transactions
 from django.views.generic import DeleteView
 from .models import TransactionId
 from kacaring.km_price import get_km_price
@@ -45,6 +45,13 @@ def show_user_transactions(request, username):
     user_data = get_user_data(username)
     context = {'user': username, 'entries': user_data[:-1]}
     return render(request, 'oversigter/user_transactions.html', context)
+
+
+@login_required(login_url='login')
+def show_bank_transactions(request):
+    account_data = get_bank_transactions()
+    context = {'entries': account_data[:-1]}
+    return render(request, 'oversigter/bank_account_transactions.html', context)
 
 
 class TransactionDelete(DeleteView):
