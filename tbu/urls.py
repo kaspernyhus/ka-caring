@@ -8,8 +8,8 @@ urlpatterns = [
     path('betaling', login_required(login_url='login')(views.CreateBetaling.as_view()), name='create_betaling'),
     path('udgift', login_required(login_url='login')(views.CreateUdgift.as_view()), name='create_udgift'),
     path('udbetaling', login_required(login_url='login')(views.CreateUdbetaling.as_view()), name='create_udbetaling'),
-    path('tankning/update/<int:pk>', login_required(login_url='login')(views.TankningUpdate.as_view()), name='update_tankning'),
-    path('betaling/update/<int:pk>', login_required(login_url='login')(views.BetalingUpdate.as_view()), name='update_betaling'),
-    path('udgift/update/<int:pk>', login_required(login_url='login')(views.UdgiftUpdate.as_view()), name='update_udgift'),
+    # path('tankning/update/<int:pk>', login_required(login_url='login')(views.TankningUpdate.as_view()), name='update_tankning'),
+    # path('betaling/update/<int:pk>', login_required(login_url='login')(views.BetalingUpdate.as_view()), name='update_betaling'),
+    # path('udgift/update/<int:pk>', login_required(login_url='login')(views.UdgiftUpdate.as_view()), name='update_udgift'),
 ]
 

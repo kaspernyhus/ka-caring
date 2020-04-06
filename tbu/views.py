@@ -129,39 +129,39 @@ class CreateUdbetaling(TemplateView):
 #     update transactions     #
 ###############################
 
-class TankningUpdate(UpdateView):
-    model = Tankning
-    form_class = TankningForm
-    template_name = 'transactions/edit_entries.html'
-    success_url = '/'
+# class TankningUpdate(UpdateView):
+#     model = Tankning
+#     form_class = TankningForm
+#     template_name = 'transactions/edit_entries.html'
+#     success_url = '/'
 
-    def form_valid(self, form):
-        instance = form.save(commit=False)
-        update_user_saldo(instance.transaction_id, instance.user_id, -instance.amount)
-        return super(TankningUpdate, self).form_valid(form)
-
-
-class BetalingUpdate(UpdateView):
-    model = Betaling
-    form_class = BetalingForm
-    #fields = ['date', 'amount']
-    template_name = 'transactions/edit_entries.html'
-    success_url = '/'
-
-    def form_valid(self, form):
-        instance = form.save(commit=False)
-        update_user_saldo(instance.transaction_id, instance.user_id, -instance.amount)
-        return super(BetalingUpdate, self).form_valid(form)
+#     def form_valid(self, form):
+#         instance = form.save(commit=False)
+#         update_user_saldo(instance.transaction_id, instance.user_id, -instance.amount)
+#         return super(TankningUpdate, self).form_valid(form)
 
 
-class UdgiftUpdate(UpdateView):
-    model = Udgift
-    form_class = UdgiftForm
-    #fields = ['date', 'amount', 'description', 'user_id']
-    template_name = 'transactions/edit_entries.html'
-    success_url = '/'
+# class BetalingUpdate(UpdateView):
+#     model = Betaling
+#     form_class = BetalingForm
+#     #fields = ['date', 'amount']
+#     template_name = 'transactions/edit_entries.html'
+#     success_url = '/'
 
-    def form_valid(self, form):
-        instance = form.save(commit=False)
-        update_user_saldo(instance.transaction_id, instance.user_id, instance.amount)
-        return super(UdgiftUpdate, self).form_valid(form)
+#     def form_valid(self, form):
+#         instance = form.save(commit=False)
+#         update_user_saldo(instance.transaction_id, instance.user_id, -instance.amount)
+#         return super(BetalingUpdate, self).form_valid(form)
+
+
+# class UdgiftUpdate(UpdateView):
+#     model = Udgift
+#     form_class = UdgiftForm
+#     #fields = ['date', 'amount', 'description', 'user_id']
+#     template_name = 'transactions/edit_entries.html'
+#     success_url = '/'
+
+#     def form_valid(self, form):
+#         instance = form.save(commit=False)
+#         update_user_saldo(instance.transaction_id, instance.user_id, instance.amount)
+#         return super(UdgiftUpdate, self).form_valid(form)
