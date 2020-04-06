@@ -132,11 +132,11 @@ def create_calendar_event(start_date, end_date, username):
 
 @login_required(login_url='login')
 def create_booking(request):
-  form = BookingForm(request.user.groups)
+  form = BookingForm(request.user)
   form.fields['user_id'].initial = request.user.id
 
   if request.method == 'POST':
-    form = BookingForm(request.POST)
+    form = BookingForm(request.user, request.POST)
     if form.is_valid():
       data = form.cleaned_data
       start_date = data['start_date']
