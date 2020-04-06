@@ -69,7 +69,7 @@ def get_total_tankning():
 def update_accounts(request, new_id, form_data, category, km=0):
     user_list = form_data['user_id']
     user_id = eval(user_list)
-    
+
     ### ROUTER ###
 
     if category == 'Indskud':
@@ -93,20 +93,23 @@ def update_accounts(request, new_id, form_data, category, km=0):
         else:
             update_user_account(new_id, user_id, -form_data['amount'], category)
 
-
     elif category == 'Tur':
-        number_of_users = len(user_id)
-        number_of_users + extra_pas(form_data)[1]
-        user_amount = form_data['amount'] / number_of_users
+        if user_id == ['100']: #Tur mangler!
+            print('----------- Tur mangler ! ------------')
+            pass
+        else:
+            number_of_users = len(user_id)
+            number_of_users + extra_pas(form_data)[1]
+            user_amount = form_data['amount'] / number_of_users
 
-        for user in user_id:
-            userid = eval(user)
-            update_user_account(new_id, userid, user_amount, category, km=km)
+            for user in user_id:
+                userid = eval(user)
+                update_user_account(new_id, userid, user_amount, category, km=km)
 
-        if extra_pas(form_data)[1]:
-            user = extra_pas(form_data)[0]
-            user_amount = user_amount + user_amount * extra_pas(form_data)[1]
-            _update_user_saldo(new_id, extra_pas(form_data)[0], user_amount)
+            if extra_pas(form_data)[1]:
+                user = extra_pas(form_data)[0]
+                user_amount = user_amount + user_amount * extra_pas(form_data)[1]
+                _update_user_saldo(new_id, extra_pas(form_data)[0], user_amount)
 
 
 def update_user_account(transaction_id, user_id, amount, category, km=0):

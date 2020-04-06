@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from .forms import TankningForm, BetalingForm, UdgiftForm, UdbetalingForm
-from db_functions.users import get_usernames
+from db_functions.users import get_usernames, get_firstnames
 from db_functions.transactions import create_new_transaction, update_accounts, update_user_saldo
 from emailing.views import add_to_mail_Q
 from django.views.generic.edit import UpdateView
@@ -25,7 +25,7 @@ class CreateTankning(TemplateView):
         if form.is_valid():
             new_id = create_new_transaction(request, 'Tankning')
             data = form.cleaned_data
-            
+
             save_with_id = form.save(commit=False)
             save_with_id.transaction_id = new_id
             save_with_id.save()
@@ -34,7 +34,7 @@ class CreateTankning(TemplateView):
 
             add_to_mail_Q(request.user.username, data, 'Tankning')
 
-            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'users': get_usernames(data['user_id'])})
+            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'users': get_firstnames(data['user_id'])})
         else:
             return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en brugere'})
         
@@ -65,7 +65,7 @@ class CreateBetaling(TemplateView):
 
             add_to_mail_Q(request.user.username, data, 'Indbetaling')
             
-            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'users': get_usernames(data['user_id'])})
+            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'users': get_firstnames(data['user_id'])})
         else:
             return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en brugere'})
 
@@ -92,7 +92,7 @@ class CreateUdgift(TemplateView):
             
             add_to_mail_Q(request.user.username, data, 'Udgift')
 
-            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'users': get_usernames(data['user_id'])})
+            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'users': get_firstnames(data['user_id'])})
         else:
             return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en brugere'})
 
@@ -119,7 +119,7 @@ class CreateUdbetaling(TemplateView):
             
             update_accounts(request, new_id, data, 'Udbetaling')
             
-            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'users': get_usernames(data['user_id'])})
+            return render(request, 'transactions/betaling_confirm.html', {'date': data['date'], 'amount': data['amount'], 'users': get_firstnames(data['user_id'])})
         else:
             return render(request, 'transactions/form_error.html', {'error': 'Husk at vælge en brugere'})
 

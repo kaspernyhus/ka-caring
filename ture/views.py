@@ -1,12 +1,13 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render
-from .forms import TurForm
+from .forms import TurForm, TurUpdateForm
 from kacaring.km_price import get_km_price
 from db_functions.transactions import create_new_transaction, get_current_km, update_accounts, update_user_km
 from db_functions.users import get_usernames, extra_pas
 from emailing.views import add_to_mail_Q
 from django.views.generic.edit import UpdateView
 from .models import Ture
+from django.shortcuts import get_object_or_404
 
 
 class CreateTur(TemplateView):
@@ -53,33 +54,39 @@ class CreateTur(TemplateView):
 
 class TurUpdate(UpdateView):
     model = Ture
-    #fields = ['date', 'km_count', 'user_id', 'extra_pas']
-    form_class = TurForm
+    form_class = TurUpdateForm
     template_name = 'transactions/edit_entries.html'
-    success_url = '/'
-    
+    success_url = '/oversigt/alle_transaktioner' 
+
+    def get_form_kwargs(self):
+        kwargs = super(TurUpdate, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
     def form_valid(self, form):
         form_obj = form.save(commit=False)
         
-        # recalc other tur data
-        data = Ture.objects.get(id=form_obj.id)
-        new_delta_km = data.delta_km + form_obj.km_count - data.km_count
-        form_obj.delta_km = new_delta_km
-        tur_pris = new_delta_km * get_km_price(self.request.user.groups)
-        form_obj.price = tur_pris
 
-        form_obj.user = self.request.user
-        print(form_obj.user)
+        # # recalc other tur data
+        # data = Ture.objects.get(id=form_obj.id)
+        # new_delta_km = data.delta_km + form_obj.km_count - data.km_count
+        # form_obj.delta_km = new_delta_km
+        # tur_pris = new_delta_km * get_km_price(self.request.user.groups)
+        # form_obj.price = tur_pris
 
-        try:
-            update_user_km(form_obj.transaction_id, form_obj.user_id, form_obj.delta_km, form_obj.price)
-        except:
-            data = form.cleaned_data
-            data.update({'amount': tur_pris})
+        # form_obj.user = self.request.user
 
-            new_id = update_accounts(self.request, data, 'Tur', km=new_delta_km)
+
+        # try:
+        #     update_user_km(form_obj.transaction_id, form_obj.user_id, form_obj.delta_km, form_obj.price)
+        # except:
+        #     data = form.cleaned_data
+        #     data.update({'amount': tur_pris})
+
+        #     new_id = update_accounts(self.request, data, 'Tur', km=new_delta_km)
             
-            form_obj.transaction_id = new_id                
-            form_obj.save()
+        #     form_obj.transaction_id = new_id                
+        
+        form_obj.save()
 
         return super(TurUpdate, self).form_valid(form)

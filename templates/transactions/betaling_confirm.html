@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1 class="header">Betaling registreret!</h1>
-<p class="header">d. {{date|date:"d M Y"}} har {% for user in users %} {{user}} {% endfor %} betalt {{amount}} kr.</p>
+<p class="header">d. {{date|date:"d M Y"}} har {{users}} betalt {{amount}} kr.</p>
 <div class="center">
     <a href="{% url 'index' %}" class="button">Hjem</a>
 </div>

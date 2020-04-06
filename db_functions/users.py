@@ -12,8 +12,7 @@ def get_usernames(user_id):
   #print('User_id received: ', user_id, type(user_id))
 
   users = get_users()
-  users.append({'id': 0, 'username': 'Fælles-konto'})
-
+  
   if isinstance(user_id, str):
     user_id = eval(user_id)
   
@@ -37,24 +36,21 @@ def get_usernames(user_id):
 
 
 def get_firstnames(user_id):
-  #print('User_id received: ', user_id, type(user_id))
-
   users = get_users()
   users.append({'id': 0, 'username': 'Fælles-konto', 'first_name': 'Fælles-konto'})
-
+  users.append({'id': 100, 'username': 'Tur_mangler', 'first_name': 'Tur mangler'})
+  
   if isinstance(user_id, str):
     user_id = eval(user_id)
   
   if isinstance(user_id, int):  # if type int value given
     for user in users:
       if user_id == user['id']:
-        #print('Users To Return: ', user['username'])
         return user['first_name']
   
   else:                         # multiple values given e.g. ['7', '8']
     user_list = [eval(user) for user in user_id]
     users_toreturn = [user['first_name'] for userid in user_list for user in users if user['id'] == userid]
-    # print('Users To Return: ', users_toreturn)
     return users_toreturn
 
 
@@ -72,8 +68,7 @@ def get_userIDs(username):
 
 def get_users():
   users = User.objects.all()
-  for user in users:
-    print(user, type(user))
+  
   return [{'id': user.id, 'username': user.username, 'first_name': user.first_name} for user in users]
 
 
@@ -96,29 +91,39 @@ def is_VIP(user):
 #        form CHOICES         #
 ###############################
 
-def get_choices(user_groups, tur=False):
-  if user_groups.filter(name='ALL').exists():
+def get_choices(user_groups, tur=False, get_all=False):
+  if get_all == True:
     CHOICES=[(8,'Kirsten'),
-            (9,'Marie'),
-            (7,'Kasper'),
-            (10,'Farmor & Farfar'),
-            (11,'Gabriel'),
-          ]
-
-  elif user_groups.filter(name='FamNyhus').exists():
-    CHOICES=[(8,'Kirsten'),
-             (9,'Marie'),
-             (7,'Kasper'),
-             (10,'Farmor & Farfar'),
-          ]
-  elif user_groups.filter(name='Guests').exists():
-    CHOICES=[(11,'Gabriel'),
-          ]
+              (9,'Marie'),
+              (7,'Kasper'),
+              (10,'Farmor & Farfar'),
+              (11,'Gabriel'),
+            ]
+    return CHOICES
+  
   else:
-    CHOICES=[]
+    if user_groups.filter(name='ALL').exists():
+      CHOICES=[(8,'Kirsten'),
+              (9,'Marie'),
+              (7,'Kasper'),
+              (10,'Farmor & Farfar'),
+              (11,'Gabriel'),
+            ]
 
-  if tur==True:
-      CHOICES.append((100,'Tur mangler',))
+    elif user_groups.filter(name='FamNyhus').exists():
+      CHOICES=[(8,'Kirsten'),
+                (9,'Marie'),
+                (7,'Kasper'),
+                (10,'Farmor & Farfar'),
+            ]
+    elif user_groups.filter(name='Guests').exists():
+      CHOICES=[(11,'Gabriel'),
+            ]
+    else:
+      CHOICES=[]
+
+    if tur==True:
+        CHOICES.append((100,'Tur mangler',))
 
   return CHOICES
 
@@ -146,6 +151,17 @@ def extra_pas(data):
     else:
         return [0, 0]
 
+
+EKSTRA=[(0,''),
+        (1,'Kirsten +1'),
+        (2,'Marie +1'),
+        (3,'Kasper +1'),
+        (4,'Farmor & Farfar +1'),
+        (5,'Kirsten +2'),
+        (6,'Marie +2'),
+        (7,'Kasper +2'),
+        (8,'Farmor & Farfar +2')
+        ]
 
 ###############################
 #          User data          #
