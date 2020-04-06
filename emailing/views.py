@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, time
 from django.views.generic import TemplateView
 from .forms import UserPrefForm
 from db_functions.emails import get_email_prefs, update_email_prefs, get_email_que, update_email_que
-from db_functions.users import request_user_IDs, get_usernames
+from db_functions.users import request_user_IDs, get_usernames, get_firstnames
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
@@ -62,7 +62,7 @@ def send_monthly_saldo_mail():
     for pref in email_pref:
       if pref == 0:
         amount = round(get_saldo(user), 2)
-        username = get_usernames(user)
+        username = get_firstnames(user)
         message = 'Hej ' + username + ',\n \nDu skylder Ford-KA\'ssen: ' + str(amount) + ' kr. \n MobilePay til Kasper på 61681287 og husk at registrer det i App\'en. \n \n Mvh \nFord Ka Kørsel aps'
         
         if amount != 0:

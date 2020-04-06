@@ -70,8 +70,6 @@ def update_accounts(request, new_id, form_data, category, km=0):
     user_list = form_data['user_id']
     user_id = eval(user_list)
     
-    #print('user ID: ', user_id, type(user_id))
-    
     ### ROUTER ###
 
     if category == 'Indskud':
