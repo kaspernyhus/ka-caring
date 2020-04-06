@@ -222,20 +222,20 @@ def get_all_data():
     
     tankninger = Tankning.objects.all().order_by('-id')
     for tankning in tankninger:
-        all_data.append({'date': tankning.date, 'amount': -tankning.amount, 'users': get_usernames(tankning.user_id), 'type': 'Tankning', 'table_id': tankning.id, 'transaction_id': tankning.transaction_id})
+        all_data.append({'date': tankning.date, 'amount': -tankning.amount, 'users': [get_usernames(eval(tankning.user_id))], 'type': 'Tankning', 'table_id': tankning.id, 'transaction_id': tankning.transaction_id})
     
     betalinger = Betaling.objects.all().order_by('-id')
     for betaling in betalinger:
         if betaling.amount < 0:
-          all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': get_usernames(betaling.user_id), 'type': 'Udbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+          all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Udbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
         elif betaling.is_indskud:
-            all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': get_usernames(betaling.user_id), 'type': 'Indskud', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+            all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Indskud', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
         else:
-            all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': get_usernames(betaling.user_id), 'type': 'Indbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+            all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_usernames(betaling.user_id)], 'type': 'Indbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
 
     udgifter = Udgift.objects.all().order_by('-id')
     for udgift in udgifter:
-        all_data.append({'date': udgift.date, 'amount': -udgift.amount, 'description': udgift.description, 'users': get_usernames(udgift.user_id), 'type': 'Udgift', 'table_id': udgift.id, 'transaction_id': udgift.transaction_id})
+        all_data.append({'date': udgift.date, 'amount': -udgift.amount, 'description': udgift.description, 'users': [get_usernames(udgift.user_id)], 'type': 'Udgift', 'table_id': udgift.id, 'transaction_id': udgift.transaction_id})
     
     all_data_sorted = sorted(all_data, key=lambda k: k['date'], reverse=True)
     return all_data_sorted

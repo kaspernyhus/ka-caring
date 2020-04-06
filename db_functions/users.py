@@ -9,24 +9,31 @@ import db_functions
 ###############################
 
 def get_usernames(user_id):
+  print('User_id received: ', user_id, type(user_id))
+
   users = get_users()
   users.append({'id': 0, 'username': 'Fælles-konto'})
 
+  if isinstance(user_id, str):
+    user_id = eval(user_id)
+  
   if isinstance(user_id, int):  # if type int value given
     for user in users:
       if user_id == user['id']:
+        print('Users To Return: ', user['username'])
         return user['username']
-  else:                         # multiple values given e.g. [7, 8]
-    user_list = []
-    for user in user_id:
-      user_list.append(eval(user))
+  
+  else:                         # multiple values given e.g. ['7', '8']
+    user_list = [eval(user) for user in user_id]
     """
     for userid in userdata: 
       for user in users: 
         if user['id'] == userid: 
           return user['username']
             """
-    return [user['username'] for userid in user_list for user in users if user['id'] == userid]
+    users_toreturn = [user['username'] for userid in user_list for user in users if user['id'] == userid]
+    print('Users To Return: ', users_toreturn)
+    return users_toreturn
 
 
 def get_userIDs(username):
