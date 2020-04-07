@@ -60,6 +60,11 @@ def get_total_tankning():
     return total
 
 
+def get_total_udgift():
+    db_data = Udgift.objects.all()
+    for entry in db_data:
+      total =+ entry.amount
+    return total
 
 
 ###############################
