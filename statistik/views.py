@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 @login_required(login_url='login')
 @user_passes_test(is_VIP, login_url='guest_stats')
 def show_stats(request):
-  context = {'total_km': get_total_km ,'benzinpris_pr_km': calc_km_fuel_price(), 'usage': calc_usage()[:-1], 'pris_pr_km': calc_expenses_pr_km}
+  context = {'total_km': get_total_km ,'benzinpris_pr_km': calc_km_fuel_price(), 'usage': calc_usage()[:-1], 'pris_pr_km': calc_expenses_pr_km, 'total_expense': get_total_udgift}
   return render(request, 'oversigter/stats.html', context)
 
 
