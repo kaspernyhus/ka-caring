@@ -85,7 +85,6 @@ def add_to_mail_Q(username, data, category):
   
   if subject and message:
     for user in request_user_IDs(exclude=0):
-      print('USER: ', user)
       email_pref = get_email_prefs(user)
 
       for pref in email_pref:
@@ -118,7 +117,7 @@ def send_all_mails_in_Q():
   for email in emailQue:
     send_mail_to_user(email['user_id'], email['subject'], email['message'])
   emailQue_clear()
-  
+
 
 #######################
 #      Scheduler      #
