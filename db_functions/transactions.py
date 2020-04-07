@@ -55,16 +55,20 @@ def get_total_km():
 
 def get_total_tankning():
     db_data = Tankning.objects.all()
+    total = 0
     for entry in db_data:
-      total =+ entry.amount
+      total += entry.amount
     return total
 
 
 def get_total_udgift():
     db_data = Udgift.objects.all()
+    total = 0
     for entry in db_data:
-      total =+ entry.amount
+        total += entry.amount
     return total
+
+
 
 
 ###############################
