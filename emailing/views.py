@@ -84,7 +84,8 @@ def add_to_mail_Q(username, data, category):
     message = 'd. ' + data['date'].strftime("%d/%m/%y") + ' har ' + username + ' registreret en indbetaling fra ' + str(get_usernames(data['user_id'])) + ' (userID: ' + str(data['user_id']) + ') på ' + str(data['amount']) + ' kr.\n \n Mvh \nFord Ka Kørsel aps'
   
   if subject and message:
-    for user in request_user_IDs():
+    for user in request_user_IDs(exclude=0):
+      print('USER: ', user)
       email_pref = get_email_prefs(user)
 
       for pref in email_pref:

@@ -29,7 +29,7 @@ def update_email_prefs(user_id, form_data):
   
   db_data.monthly_saldo = False
   db_data.udgift_oprettet = False
-  db_data.ankning_oprettet = False
+  db_data.tankning_oprettet = False
   db_data.tur_oprettet = False
 
   form_data = eval(form_data['user_prefs'])
@@ -40,7 +40,7 @@ def update_email_prefs(user_id, form_data):
     if checkbox == '1':
       db_data.udgift_oprettet = True
     if checkbox == '2':
-      db_data.ankning_oprettet = True
+      db_data.tankning_oprettet = True
     if checkbox == '3':
       db_data.tur_oprettet = True
 
