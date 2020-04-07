@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from db_functions.users import get_user_km, is_VIP, request_user_IDs, get_usernames
+from db_functions.users import get_user_km, is_VIP, request_user_IDs, get_usernames, get_firstnames
 from db_functions.transactions import get_current_km, get_total_tankning, get_total_km, get_total_udgift
 from django.contrib.auth.decorators import login_required, user_passes_test
 
@@ -34,7 +34,7 @@ def calc_usage():
   for user_id in request_user_IDs():
     user_km = get_user_km(user_id)
     user_usage = (user_km / total_km) * 100
-    user = {'id': user_id, 'username': get_usernames(user_id), 'km': user_km, 'usage': round(user_usage, 0)}
+    user = {'id': user_id, 'username': get_firstnames(user_id), 'km': user_km, 'usage': round(user_usage, 0)}
     usage.append(user)
   return usage
 
