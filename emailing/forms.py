@@ -20,8 +20,11 @@ class UserPrefForm(forms.ModelForm):
   def __init__(self, user, *args, **kwargs):
         super(UserPrefForm, self).__init__(*args, **kwargs)
         self.fields['user_prefs'] = forms.CharField(label='', widget=forms.CheckboxSelectMultiple(choices=get_choices(user.groups), attrs={'class': 'checkbox'}))
+        self.fields['email'].initial = user.email
 
+  email = forms.CharField(label='', widget=forms.TextInput(attrs={'class': 'input',}))
   user_prefs = forms.CharField(label='', widget=forms.CheckboxSelectMultiple(attrs={'class': 'checkbox'}))
+  
   
   class Meta:
         model = EmailPreferences

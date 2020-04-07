@@ -22,6 +22,10 @@ class UserPref(TemplateView):
         form = UserPrefForm(request.user, request.POST)
         if form.is_valid():
             data = form.cleaned_data
+            user_obj = User.objects.get(id=request.user.id)
+            user_obj.email = data['email']
+            user_obj.save()
+            
             update_email_prefs(request.user.id, data)
         else:
             update_email_prefs(request.user.id, {'user_prefs': "[]"})
