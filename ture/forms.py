@@ -45,7 +45,7 @@ class TurUpdateForm(forms.ModelForm):
         fields = [
             'date', 
             'user_id',
-            'extra_pas'
+            'extra_pas',
         ]
         widgets = {
             'date': DateInput(attrs={'class': 'input'}),
