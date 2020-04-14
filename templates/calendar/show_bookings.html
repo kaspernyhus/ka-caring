@@ -19,6 +19,9 @@
             <th>
               Slut
             </th>
+            <th>
+
+            </th>
         </tr>
       </thead>
       <tbody>
@@ -32,7 +35,11 @@
               </td>
               <td>
                 {{event.end}}
-            </td>
+              </td>
+              <td>
+                <a href="{% url 'update_booking' event.id %}" class="xsml-button">Rediger</a>
+                <a href="{% url 'delete_booking' event.id %}" class="xsml-button">Slet</a>
+              </td>
           </tr>
         {% endfor %}
       </tbody>

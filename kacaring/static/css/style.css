@@ -116,7 +116,7 @@ body {
   text-decoration: none;
   display: inline-block;
   font-size: 60%;
-  width: 40%;
+  
   max-width: 360px;
   transition: all 170ms ease-in-out;
   cursor: pointer;

@@ -7,12 +7,12 @@ from kacaring import settings
 from oauth2client.contrib import xsrfutil
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.contrib.django_util.storage import DjangoORMStorage
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from httplib2 import Http
 from datetime import datetime, timedelta
 from django.views.generic import TemplateView
 from .forms import BookingForm
-from db_functions.users import get_usernames
+from db_functions.users import get_usernames, get_userIDs
 from django.contrib.auth.decorators import login_required
 
 
@@ -33,6 +33,39 @@ def login(request):
     return render(request, 'google_login.html', {'status': status})
 
 
+def convert_calendar_start_time(calendar_event):
+  start_date = datetime(2020, 1, 1)
+  
+  try:
+    start_date = datetime.strptime(calendar_event['start']['date'], '%Y-%m-%d').date()
+  except:
+    pass
+  try:
+    start_date = datetime.strptime(calendar_event['start']['dateTime'], '%Y-%m-%dT%H:%M:%S%z').date()
+  except:
+    pass
+  
+  return start_date
+
+
+def convert_calendar_end_time(calendar_event):
+  end_date = datetime(2020, 1, 1)
+  
+  try:
+    end_time = datetime.strptime(calendar_event['end']['date'], '%Y-%m-%d')
+    end_time = end_time - timedelta(1)
+    end_date = end_time.date()
+  except:
+    pass
+  try:
+    end_time = datetime.strptime(calendar_event['end']['dateTime'], '%Y-%m-%dT%H:%M:%S%z').date()
+    end_time = end_time - timedelta(1)
+    end_date = end_time.date()
+  except:
+   pass
+  
+  return end_date
+
 
 def get_calendar_events():
   credentials = CredentialsModel.objects.get(id=1)
@@ -46,40 +79,35 @@ def get_calendar_events():
 
   calendar_events = service.events().list(calendarId=calendar_id, timeMin=_2_weeks_ago).execute()
 
+  #print('CALENDAR EVENTS: ', calendar_events)
+
   events = []
 
   for calendar_event in calendar_events['items']:
-    start_date = datetime(2020, 1, 1)
-    end_date = datetime(2020, 1, 1)
-
-    try:
-      start_date = datetime.strptime(calendar_event['start']['date'], '%Y-%m-%d').date()
-    except:
-      pass
-    try:
-      start_date = datetime.strptime(calendar_event['start']['dateTime'], '%Y-%m-%dT%H:%M:%S%z').date()
-    except:
-      pass
+    #print('CALENDAR EVENT: ', calendar_event)
     
-    try:
-      end_time = datetime.strptime(calendar_event['end']['date'], '%Y-%m-%d')
-      end_time = end_time - timedelta(1)
-      end_date = end_time.date()
-    except:
-      pass
-    try:
-      end_time = datetime.strptime(calendar_event['end']['dateTime'], '%Y-%m-%dT%H:%M:%S%z').date()
-      end_time = end_time - timedelta(1)
-      end_date = end_time.date()
-    except:
-      pass
+    start_date = convert_calendar_start_time(calendar_event)
+    end_date = convert_calendar_end_time(calendar_event)
+    print('Start: ', start_date)
+    print('End: ', end_date)
     
     if end_date >= current_date:
-      event = {'summary': calendar_event['summary'], 'start': start_date.strftime('%d/%m/%y'), 'end': end_date.strftime('%d/%m/%y')}
+      event = {'id': calendar_event['id'], 'summary': calendar_event['summary'], 'start': start_date.strftime('%d/%m/%y'), 'end': end_date.strftime('%d/%m/%y')}
       current_date = datetime.now().date()
       events.append(event)
 
   return events  
+
+
+def get_calendar_event(event_ID):
+  credentials = CredentialsModel.objects.get(id=1)
+  service = build('calendar', 'v3', credentials=credentials.credential)
+  calendar_list_entry = service.calendarList().list().execute()
+  calendar_id = calendar_list_entry['items'][0]['id']
+  
+  event = service.events().get(calendarId=calendar_id, eventId=event_ID).execute()
+
+  return event
 
 
 @login_required(login_url='login')
@@ -130,6 +158,27 @@ def create_calendar_event(start_date, end_date, username):
   event = service.events().insert(calendarId='ford.ka.korsel@gmail.com', body=event).execute()
 
 
+
+def update_calendar_event(event_ID, start_date, end_date, username):
+  credentials = CredentialsModel.objects.get(id=1)
+  service = build('calendar', 'v3', credentials=credentials.credential)
+  
+  event = get_calendar_event(event_ID)
+
+  event['summary'] = username
+  event['start'] = {
+    'date': start_date.strftime("%Y-%m-%d"),
+    'timeZone': 'Europe/Copenhagen',
+  }
+  event['end'] = {
+    'date': end_date.strftime("%Y-%m-%d"),
+    'timeZone': 'Europe/Copenhagen',
+  }
+
+  updated_event = service.events().update(calendarId='ford.ka.korsel@gmail.com', eventId=event['id'], body=event).execute()
+
+
+
 @login_required(login_url='login')
 def create_booking(request):
   form = BookingForm(request.user)
@@ -143,7 +192,6 @@ def create_booking(request):
       end_date = data['end_date']
       username = get_usernames(data['user_id'])
       
-
       if check_if_booked(start_date, end_date):
         OBS = 1
       else:
@@ -154,6 +202,42 @@ def create_booking(request):
       return render(request, 'calendar/event_created.html', context={'user': username, 'start_date': start_date.strftime("%d/%m/%Y") , 'end_date': end_date.strftime("%d/%m/%Y"), 'OBS': OBS})
 
   return render(request, 'calendar/create_event.html', context={'form': form})
+
+
+def update_booking(request, event_Id):
+  event = get_calendar_event(event_Id)
+
+  start_date = convert_calendar_start_time(event)
+  end_date = convert_calendar_end_time(event)
+
+  form = BookingForm(request.user)
+  form.fields['user_id'].initial = get_userIDs(event['summary'])
+  form.fields['start_date'].initial = start_date
+  form.fields['end_date'].initial = end_date
+
+  if request.method == 'POST':
+    form = BookingForm(request.user, request.POST)
+    if form.is_valid():
+      data = form.cleaned_data
+      start_date = data['start_date']
+      end_date = data['end_date']
+      username = get_usernames(data['user_id'])
+
+      update_calendar_event(event_Id, start_date, end_date, username)
+
+      return render(request, 'calendar/event_created.html', context={'user': username, 'start_date': start_date.strftime("%d/%m/%Y") , 'end_date': end_date.strftime("%d/%m/%Y")})
+
+  return render(request, 'calendar/create_event.html', context={'form': form})
+
+
+def delete_booking(request, event_Id):
+  credentials = CredentialsModel.objects.get(id=1)
+  service = build('calendar', 'v3', credentials=credentials.credential)
+
+  service.events().delete(calendarId='ford.ka.korsel@gmail.com', eventId=event_Id).execute()
+
+  return redirect('show_bookings')
+
 
 
 ################################
