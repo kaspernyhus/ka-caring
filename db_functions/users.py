@@ -174,7 +174,7 @@ def _get_latest_entry(user_id):
 
 
 def get_user_saldo(user_id):
-    return _get_latest_entry(user_id).saldo
+    return -_get_latest_entry(user_id).saldo
 
 
 def get_user_km(user_id):
@@ -196,7 +196,7 @@ def get_user_data(username):
           udgift_data = db_functions.transactions.get_db_entry(entry.transaction_id)
           description = udgift_data.description
         
-        user_data.append({'date': entry.timestamp, 'saldo': entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount, 'description': description, 'transaction_id': entry.transaction_id })
+        user_data.append({'date': entry.timestamp, 'saldo': -entry.saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount, 'description': description, 'transaction_id': entry.transaction_id })
    
     return user_data
 
