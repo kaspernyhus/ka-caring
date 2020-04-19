@@ -22,6 +22,7 @@ class Betaling(models.Model):
   user_id = models.CharField(max_length=50)
   transaction = models.ForeignKey(TransactionId, on_delete=models.CASCADE)
   is_indskud = models.BooleanField(blank=True)
+  description = models.CharField(default=None, max_length=200, blank=True, null=True)
 
 
 class Udgift(models.Model):
