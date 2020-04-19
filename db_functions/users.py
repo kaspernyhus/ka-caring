@@ -192,13 +192,18 @@ def get_user_data(username):
     
     db_data = Model.objects.all().order_by('-id')
     for entry in db_data:
+        print(entry)
         description = ''
         if entry.category == 'Indskud':
           indskud_data = db_functions.transactions.get_db_entry(entry.transaction_id)
           entry.amount = indskud_data.amount
-        if entry.category == 'Udgift':
-          udgift_data = db_functions.transactions.get_db_entry(entry.transaction_id)
-          description = udgift_data.description
+        
+        
+        try:
+          betaling_data = db_functions.transactions.get_db_entry(entry.transaction_id)
+          description = betaling_data.description
+        except:
+          pass
         
         if entry.saldo == 0:
           saldo = 0
