@@ -252,11 +252,11 @@ def get_all_data():
     betalinger = Betaling.objects.all().order_by('-id')
     for betaling in betalinger:
         if betaling.amount < 0:
-          all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': [get_firstnames(betaling.user_id)], 'type': 'Udbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+          all_data.append({'date': betaling.date, 'amount': -betaling.amount, 'users': [get_firstnames(betaling.user_id)], 'type': 'Udbetaling', 'table_id': betaling.id, 'description': betaling.description, 'transaction_id': betaling.transaction_id})
         elif betaling.is_indskud:
-            all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_firstnames(betaling.user_id)], 'type': 'Indskud', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+            all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_firstnames(betaling.user_id)], 'type': 'Indskud', 'table_id': betaling.id, 'description': betaling.description, 'transaction_id': betaling.transaction_id})
         else:
-            all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_firstnames(betaling.user_id)], 'type': 'Indbetaling', 'table_id': betaling.id, 'transaction_id': betaling.transaction_id})
+            all_data.append({'date': betaling.date, 'amount': betaling.amount, 'users': [get_firstnames(betaling.user_id)], 'type': 'Indbetaling', 'table_id': betaling.id, 'description': betaling.description, 'transaction_id': betaling.transaction_id})
 
     udgifter = Udgift.objects.all().order_by('-id')
     for udgift in udgifter:
