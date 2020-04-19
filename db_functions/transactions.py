@@ -223,11 +223,17 @@ def get_bank_transactions():
     account_data = []
 
     for transaction in bank_account:
+        description = ''
         try:
             amount = get_db_entry(transaction.transaction_id).amount
         except:
             pass
-        account_data.append({'date': transaction.timestamp, 'category': transaction.category, 'user': get_firstnames(transaction.user), 'amount': amount, 'saldo': transaction.saldo, 'description': transaction.description})
+        try:
+          betaling_data = get_db_entry(transaction.transaction_id)
+          description = betaling_data.description
+        except:
+          pass
+        account_data.append({'date': transaction.timestamp, 'category': transaction.category, 'user': get_firstnames(transaction.user), 'amount': amount, 'saldo': transaction.saldo, 'description': description})
 
     return account_data
 
