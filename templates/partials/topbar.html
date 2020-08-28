@@ -18,6 +18,8 @@
         <a href="{% url 'oversigt' %}">Oversigter</a>
         <a href="{% url 'statistik' %}">Statistik</a>
         <a href="{% url 'FAQ' %}">FAQ</a>
+        <a href="{% url 'Vejhjaelp' %}">Vejhjælp</a>
+        <a href="{% url 'Forsikring' %}">Forsikring</a>
         {% if request.user.username == 'kacaring' %}
         <a href="/admin">Admin</a>
         {% endif %}

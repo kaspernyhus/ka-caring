@@ -54,3 +54,10 @@ def calc_expenses_pr_km():
 def faq(request):
   return render(request, 'oversigter/faq.html')
 
+@login_required(login_url='login')
+def vejhjaelp(request):
+  return render(request, 'oversigter/vejhjaelp.html')
+
+@login_required(login_url='login')
+def forsikring(request):
+  return render(request, 'oversigter/forsikring.html')
