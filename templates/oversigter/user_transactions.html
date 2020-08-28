@@ -52,7 +52,7 @@
                         {{entry.amount|floatformat:2}} kr.
                     </td>
                     <td>
-                        {{entry.km}} km
+                        {% if entry.km %} {{entry.km}} km {% endif %}
                     </td>
                     <td>
                         {{entry.saldo|floatformat:2}} kr.

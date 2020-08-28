@@ -200,10 +200,13 @@ def get_user_data(username):
     db_data = Model.objects.all().order_by('-id')
     for entry in db_data:
         description = ''
+        km_count = ''
         if entry.category == 'Indskud':
           indskud_data = db_functions.transactions.get_db_entry(entry.transaction_id)
           entry.amount = indskud_data.amount
-        
+        if entry.category == 'Tur':
+          km_data = db_functions.transactions.get_db_entry(entry.transaction_id)
+          km_count = km_data.delta_km
         
         try:
           betaling_data = db_functions.transactions.get_db_entry(entry.transaction_id)
@@ -216,7 +219,7 @@ def get_user_data(username):
         else:
           saldo = -entry.saldo
 
-        user_data.append({'date': entry.timestamp, 'saldo': saldo, 'km': entry.km, 'category': entry.category, 'amount': entry.amount, 'description': description, 'transaction_id': entry.transaction_id })
+        user_data.append({'date': entry.timestamp, 'saldo': saldo, 'km': km_count, 'category': entry.category, 'amount': entry.amount, 'description': description, 'transaction_id': entry.transaction_id })
    
     return user_data
 
