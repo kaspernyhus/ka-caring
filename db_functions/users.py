@@ -185,6 +185,13 @@ def get_user_km(user_id):
     return _get_latest_entry(user_id).km
 
 
+def get_total_user_km():
+    total_km = 0
+    for user_id in request_user_IDs():
+      total_km += get_user_km(user_id)
+    return total_km
+
+
 def get_user_data(username):
     user_data = []
 
