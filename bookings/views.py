@@ -71,7 +71,8 @@ def get_calendar_events():
   credentials = CredentialsModel.objects.get(id=1)
   service = build('calendar', 'v3', credentials=credentials.credential)
   calendar_list_entry = service.calendarList().list().execute()
-  calendar_id = calendar_list_entry['items'][0]['id']
+
+  calendar_id = calendar_list_entry['items'][1]['id']
 
   current_date = datetime.now().date()
   _2_weeks_ago = datetime.now() - timedelta(14)
@@ -88,8 +89,8 @@ def get_calendar_events():
     
     start_date = convert_calendar_start_time(calendar_event)
     end_date = convert_calendar_end_time(calendar_event)
-    print('Start: ', start_date)
-    print('End: ', end_date)
+    #print('Start: ', start_date)
+    #print('End: ', end_date)
     
     if end_date >= current_date:
       event = {'id': calendar_event['id'], 'summary': calendar_event['summary'], 'start': start_date.strftime('%d/%m/%y'), 'end': end_date.strftime('%d/%m/%y')}
