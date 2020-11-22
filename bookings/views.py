@@ -72,7 +72,7 @@ def get_calendar_events():
   service = build('calendar', 'v3', credentials=credentials.credential)
   calendar_list_entry = service.calendarList().list().execute()
 
-  calendar_id = calendar_list_entry['items'][1]['id']
+  calendar_id = 'ford.ka.korsel@gmail.com'
 
   current_date = datetime.now().date()
   _2_weeks_ago = datetime.now() - timedelta(14)
